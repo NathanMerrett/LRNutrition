@@ -1,23 +1,153 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Laura Reynolds Nutrition',
+  description = 'No nonsense nutrition coaching',
+} = Astro.props;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/enquire', label: 'Enquire' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="logo">Laura Reynolds Nutrition</a>
+        <ul>
+          {navLinks.map(({ href, label }) => (
+            <li>
+              <a href={href} class={currentPath === href ? 'active' : ''}>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>&copy; {new Date().getFullYear()} Laura Reynolds Nutrition. All rights reserved.</p>
+    </footer>
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  :root {
+    --coral: #D17A6A;
+    --blush: #F0C0B0;
+    --brown: #7A4020;
+    --cream: #FDF8F5;
+    --text: #2d1a0e;
+    --text-muted: #7a6a62;
+    --font: Georgia, 'Times New Roman', serif;
+    --font-sans: system-ui, -apple-system, sans-serif;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    background-color: var(--cream);
+    color: var(--text);
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Nav ── */
+  header {
+    background-color: var(--cream);
+    border-bottom: 1px solid var(--blush);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .logo {
+    font-family: var(--font);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--brown);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-left: auto;
+  }
+
+  nav a {
+    color: var(--brown);
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  nav a:hover,
+  nav a.active {
+    border-bottom-color: var(--coral);
+  }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background-color: var(--brown);
+    color: var(--blush);
+    text-align: center;
+    padding: 1.5rem 1.25rem;
+    font-size: 0.85rem;
+  }
 </style>

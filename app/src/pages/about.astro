@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About | Laura Reynolds Nutrition" description="About Laura Reynolds, nutritionist.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>About Laura</h1>
+      <p>Registered nutritionist. Real food. No nonsense.</p>
+    </div>
+  </section>
+
+  <section class="bio">
+    <div class="container bio-grid">
+      <div class="bio-image-placeholder">
+        <!-- Replace with <img src="/laura.jpg" alt="Laura Reynolds" /> when ready -->
+        <div class="image-box">Photo coming soon</div>
+      </div>
+      <div class="bio-text">
+        <h2>Hi, I'm Laura</h2>
+        <p>
+          I'm a registered nutritionist with a passion for helping people build a healthier,
+          more relaxed relationship with food. I work with clients one-to-one to create
+          practical, sustainable plans that fit around real life — not some idealised version of it.
+        </p>
+        <p>
+          I got into nutrition because I know first-hand how confusing and overwhelming food
+          advice can be. My approach cuts through the noise: no fad diets, no unnecessary
+          restriction, just honest, evidence-based guidance tailored to you.
+        </p>
+        <p>
+          Whether you're looking to improve your energy, manage your weight, or simply feel
+          better day to day — I'm here to help.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="credentials">
+    <div class="container">
+      <h2>Qualifications & credentials</h2>
+      <ul>
+        <li>BSc Nutrition — [University name]</li>
+        <li>Registered with [Professional body]</li>
+        <li>Member of [Association]</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta-strip">
+    <div class="container">
+      <h2>Ready to get started?</h2>
+      <p>Get in touch and we can talk about what you're looking for.</p>
+      <a href="/enquire" class="btn-primary">Enquire now</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  /* ── Page hero ── */
+  .page-hero {
+    background-color: var(--blush);
+    padding: 3rem 1.25rem;
+    text-align: center;
+  }
+
+  .page-hero h1 {
+    font-family: var(--font);
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-hero p {
+    color: var(--brown);
+    opacity: 0.8;
+    font-size: 1.05rem;
+  }
+
+  /* ── Bio ── */
+  .bio {
+    padding: 4rem 1.25rem;
+  }
+
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 640px) {
+    .bio-grid {
+      grid-template-columns: 280px 1fr;
+    }
+  }
+
+  .image-box {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background-color: var(--blush);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brown);
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .bio-text h2 {
+    font-family: var(--font);
+    font-size: 1.5rem;
+    color: var(--brown);
+    margin-bottom: 1rem;
+  }
+
+  .bio-text p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    font-size: 0.975rem;
+  }
+
+  /* ── Credentials ── */
+  .credentials {
+    background-color: white;
+    border-top: 1px solid var(--blush);
+    border-bottom: 1px solid var(--blush);
+    padding: 3rem 1.25rem;
+  }
+
+  .credentials h2 {
+    font-family: var(--font);
+    color: var(--brown);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .credentials ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .credentials li {
+    color: var(--text-muted);
+    padding-left: 1.25rem;
+    position: relative;
+    font-size: 0.975rem;
+  }
+
+  .credentials li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--coral);
+  }
+
+  /* ── CTA strip ── */
+  .cta-strip {
+    padding: 4rem 1.25rem;
+    text-align: center;
+  }
+
+  .cta-strip h2 {
+    font-family: var(--font);
+    font-size: 1.5rem;
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-strip p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background-color: var(--coral);
+    color: var(--cream);
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+</style>
