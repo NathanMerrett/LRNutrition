@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# build output
+app/dist/
+studio/dist/
+
+# env files
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+
+# sanity
+studio/.sanity/
+
+# astro
+app/.astro/
+
+# misc
+.DS_Store
+*.log
+.netlify/
