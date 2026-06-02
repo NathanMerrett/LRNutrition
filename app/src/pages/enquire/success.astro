@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Enquiry Sent | Laura Reynolds Nutrition">
+  <section class="success">
+    <div class="container">
+      <h1>Thanks for getting in touch!</h1>
+      <p>I've received your enquiry and will get back to you as soon as possible — usually within 1–2 working days.</p>
+      <a href="/" class="btn">Back to home</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    text-align: center;
+  }
+
+  .success {
+    padding: 6rem 1.25rem;
+  }
+
+  h1 {
+    font-family: var(--font);
+    color: var(--brown);
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    background-color: var(--coral);
+    color: var(--cream);
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+
+  .btn:hover {
+    opacity: 0.85;
+  }
+</style>

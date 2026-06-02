@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// This will be driven by Sanity data once the integration is wired up.
+// For now, a static placeholder so the route exists and renders.
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: 'example-post' } },
+    { params: { slug: 'example-post-2' } },
+    { params: { slug: 'example-post-3' } },
+  ];
+}
+
+const { slug } = Astro.params;
+
+// Placeholder — replace with Sanity fetch
+const post = {
+  title: 'Placeholder post title',
+  date: '2026-05-01',
+  body: 'Post content will come from Sanity CMS once integrated.',
+};
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+---
+
+<Layout title={`${post.title} | Laura Reynolds Nutrition`}>
+  <article class="post">
+    <header class="post-header">
+      <div class="container">
+        <a href="/blog" class="back-link">← Back to blog</a>
+        <time datetime={post.date}>{formatDate(post.date)}</time>
+        <h1>{post.title}</h1>
+      </div>
+    </header>
+
+    <div class="post-body container">
+      <p>{post.body}</p>
+    </div>
+
+    <div class="post-footer container">
+      <a href="/enquire" class="cta-inline">
+        Want personalised advice? <strong>Get in touch →</strong>
+      </a>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  /* ── Header ── */
+  .post-header {
+    background-color: var(--blush);
+    padding: 3rem 1.25rem 2.5rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--brown);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+  }
+
+  .back-link:hover {
+    opacity: 1;
+  }
+
+  time {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--brown);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: var(--font);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: var(--brown);
+    line-height: 1.2;
+  }
+
+  /* ── Body ── */
+  .post-body {
+    padding: 3rem 1.25rem;
+    line-height: 1.8;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+
+  /* ── Footer CTA ── */
+  .post-footer {
+    padding: 0 1.25rem 4rem;
+  }
+
+  .cta-inline {
+    display: block;
+    background-color: var(--cream);
+    border: 1.5px solid var(--blush);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: var(--brown);
+    font-size: 0.975rem;
+    transition: border-color 0.15s;
+  }
+
+  .cta-inline:hover {
+    border-color: var(--coral);
+  }
+
+  .cta-inline strong {
+    color: var(--coral);
+  }
+</style>

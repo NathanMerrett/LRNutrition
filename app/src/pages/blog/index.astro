@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// Posts will come from Sanity once wired up.
+// Placeholder data for scaffolding:
+const posts = [
+  {
+    slug: 'example-post',
+    title: 'Why breakfast isn\'t the most important meal of the day',
+    excerpt: 'You\'ve heard it your whole life. But the evidence tells a more nuanced story.',
+    date: '2026-05-01',
+  },
+  {
+    slug: 'example-post-2',
+    title: 'How to actually read a nutrition label',
+    excerpt: 'Food labels are designed to mislead. Here\'s what to actually look for.',
+    date: '2026-04-15',
+  },
+  {
+    slug: 'example-post-3',
+    title: 'Do I need protein powder?',
+    excerpt: 'Probably not. But let\'s talk about why — and when it might genuinely help.',
+    date: '2026-04-01',
+  },
+];
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+---
+
+<Layout title="Blog | Laura Reynolds Nutrition" description="Practical nutrition tips and honest advice.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>The blog</h1>
+      <p>Practical tips and honest takes on food, nutrition, and everyday eating.</p>
+    </div>
+  </section>
+
+  <section class="posts">
+    <div class="container">
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-card">
+            <a href={`/blog/${post.slug}`}>
+              <time datetime={post.date}>{formatDate(post.date)}</time>
+              <h2>{post.title}</h2>
+              <p>{post.excerpt}</p>
+              <span class="read-more">Read more →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  /* ── Page hero ── */
+  .page-hero {
+    background-color: var(--blush);
+    padding: 3rem 1.25rem;
+    text-align: center;
+  }
+
+  .page-hero h1 {
+    font-family: var(--font);
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-hero p {
+    color: var(--brown);
+    opacity: 0.8;
+    font-size: 1.05rem;
+  }
+
+  /* ── Posts ── */
+  .posts {
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .post-card a {
+    display: block;
+    background-color: white;
+    border: 1px solid var(--blush);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .post-card a:hover {
+    border-color: var(--coral);
+  }
+
+  time {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .post-card h2 {
+    font-family: var(--font);
+    font-size: 1.2rem;
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+    line-height: 1.35;
+  }
+
+  .post-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .read-more {
+    font-size: 0.875rem;
+    color: var(--coral);
+    font-weight: 600;
+  }
+</style>

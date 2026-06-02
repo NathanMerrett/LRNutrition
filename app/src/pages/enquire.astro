@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Enquire | Laura Reynolds Nutrition" description="Get in touch to start your nutrition journey.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Get in touch</h1>
+      <p>Fill in the form below and I'll get back to you as soon as I can.</p>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="container">
+      <form
+        name="enquiry"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/enquire/success"
+      >
+        <!-- Netlify hidden field -->
+        <input type="hidden" name="form-name" value="enquiry" />
+        <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+        <div class="field">
+          <label for="name">Your name <span class="required">*</span></label>
+          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Jane Smith" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email address <span class="required">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="jane@example.com" />
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone number <span class="optional">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+44 7700 000000" />
+        </div>
+
+        <div class="field">
+          <label for="goal">What are you hoping to achieve? <span class="required">*</span></label>
+          <textarea id="goal" name="goal" required rows="5" placeholder="Tell me a bit about your goals and what's brought you here..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="how">How did you hear about me? <span class="optional">(optional)</span></label>
+          <select id="how" name="how">
+            <option value="">— Select —</option>
+            <option value="instagram">Instagram</option>
+            <option value="friend">Friend / family</option>
+            <option value="google">Google search</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">Send enquiry</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* ── Page hero ── */
+  .page-hero {
+    background-color: var(--blush);
+    padding: 3rem 1.25rem;
+    text-align: center;
+  }
+
+  .page-hero h1 {
+    font-family: var(--font);
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-hero p {
+    color: var(--brown);
+    opacity: 0.8;
+    font-size: 1.05rem;
+  }
+
+  /* ── Form ── */
+  .form-section {
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brown);
+  }
+
+  .required {
+    color: var(--coral);
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: white;
+    color: var(--text);
+    transition: border-color 0.15s;
+    /* Prevent iOS zoom on focus */
+    font-size: max(16px, 1rem);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  .btn-submit {
+    background-color: var(--coral);
+    color: var(--cream);
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    align-self: flex-start;
+    min-width: 160px;
+  }
+
+  .btn-submit:hover {
+    opacity: 0.85;
+  }
+
+  /* Full-width button on mobile */
+  @media (max-width: 480px) {
+    .btn-submit {
+      align-self: stretch;
+    }
+  }
+</style>

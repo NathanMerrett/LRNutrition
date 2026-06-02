@@ -1,11 +1,202 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Laura Reynolds Nutrition" description="No nonsense nutrition coaching for real life.">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>No nonsense<br />nutrition coaching.</h1>
+      <p>Practical, personalised guidance to help you build a healthier relationship with food — without the fads.</p>
+      <div class="cta-group">
+        <a href="/enquire" class="btn-primary">Get Started</a>
+        <a href="/about" class="btn-secondary">About Laura</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I offer -->
+  <section class="offerings">
+    <div class="container">
+      <h2>What I offer</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>1:1 Coaching</h3>
+          <p>Tailored nutrition plans built around your lifestyle, goals, and food preferences.</p>
+        </div>
+        <div class="card">
+          <h3>Ongoing Support</h3>
+          <p>Regular check-ins and adjustments to keep you on track as life changes.</p>
+        </div>
+        <div class="card">
+          <h3>No-fad Approach</h3>
+          <p>Evidence-based advice. No cleanses, no cutting food groups, no nonsense.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog teaser -->
+  <section class="blog-teaser">
+    <div class="container">
+      <h2>From the blog</h2>
+      <p class="subtitle">Practical tips and honest advice on nutrition and everyday eating.</p>
+      <a href="/blog" class="btn-outline">Read the blog</a>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background-color: var(--coral);
+    color: var(--cream);
+    padding: 4rem 1.25rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    font-family: var(--font);
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background-color: var(--brown);
+    color: var(--cream);
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--cream);
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    border: 2px solid var(--cream);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.15s;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(255,255,255,0.1);
+  }
+
+  /* ── Offerings ── */
+  .offerings {
+    padding: 4rem 0;
+  }
+
+  .offerings h2 {
+    font-family: var(--font);
+    font-size: 1.75rem;
+    color: var(--brown);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card {
+    background-color: white;
+    border: 1px solid var(--blush);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .card h3 {
+    font-family: var(--font);
+    color: var(--brown);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  /* ── Blog teaser ── */
+  .blog-teaser {
+    background-color: var(--blush);
+    padding: 4rem 1.25rem;
+    text-align: center;
+  }
+
+  .blog-teaser h2 {
+    font-family: var(--font);
+    font-size: 1.75rem;
+    color: var(--brown);
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    color: var(--brown);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .btn-outline {
+    display: inline-block;
+    border: 2px solid var(--brown);
+    color: var(--brown);
+    padding: 0.75rem 1.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--brown);
+    color: var(--cream);
+  }
+</style>
