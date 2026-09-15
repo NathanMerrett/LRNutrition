@@ -1,0 +1,67 @@
+---
+/**
+ * Renders a single non-list Portable Text block: a heading, a paragraph,
+ * a blockquote or an image.
+ *
+ * This is a separate component because a dynamic tag name (`<Tag>`) only works
+ * when the variable is in a component's frontmatter. Computing it inside a
+ * template callback instead emits malformed markup like `<p="true">`.
+ */
+import PortableTextSpan from './PortableTextSpan.astro';
+import { imageUrl, type PortableTextBlock, type SanityImage } from '../data/posts';
+
+interface Props {
+  block: PortableTextBlock;
+}
+
+const { block } = Astro.props;
+
+/**
+ * The post title is the page's <h1>, so body headings start at <h2>.
+ * An h1 typed into the body is demoted rather than breaking heading order.
+ */
+const headingTags: Record<string, string> = {
+  h1: 'h2',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+};
+
+const isImage = block._type === 'image';
+const image = isImage ? (block as unknown as SanityImage) : undefined;
+const src = image ? imageUrl(image, { width: 1200 }) : null;
+
+// A block with no actual text would render as an empty paragraph.
+const hasText = (block.children ?? []).some((span) => (span.text ?? '').trim() !== '');
+
+const isBlockquote = block.style === 'blockquote';
+const Tag = headingTags[block.style ?? ''] ?? 'p';
+---
+{
+  isImage ? (
+    /* No asset means a half-finished image field — render nothing. */
+    src && <img src={src} alt={image?.alt ?? ''} loading="lazy" />
+  ) : block._type !== 'block' || !hasText ? null : isBlockquote ? (
+    <blockquote>
+      {block.children?.map((span) => (
+        <PortableTextSpan
+          text={span.text ?? ''}
+          marks={span.marks ?? []}
+          markDefs={block.markDefs ?? []}
+        />
+      ))}
+    </blockquote>
+  ) : (
+    <Tag>
+      {block.children?.map((span) => (
+        <PortableTextSpan
+          text={span.text ?? ''}
+          marks={span.marks ?? []}
+          markDefs={block.markDefs ?? []}
+        />
+      ))}
+    </Tag>
+  )
+}
