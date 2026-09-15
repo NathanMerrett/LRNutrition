@@ -1,5 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const howItWorks = [
+  {
+    step: '01',
+    title: 'Share your story',
+    desc: 'Tell me where you are and where you want to be. No judgement — just an honest conversation about your life, goals, and history with food.',
+  },
+  {
+    step: '02',
+    title: 'Honest consultation',
+    desc: 'We\'ll look at what\'s actually going on — your habits, your patterns, and what\'s really getting in the way.',
+  },
+  {
+    step: '03',
+    title: 'Building new habits',
+    desc: 'Together we\'ll build practical, sustainable changes that fit your real life — not an idealised version of it.',
+  },
+  {
+    step: '04',
+    title: 'Staying accountable',
+    desc: 'Ongoing support and check-ins to keep you on track, adjust as life changes, and celebrate real progress.',
+  },
+];
+
+const blogPosts = [
+  {
+    slug: 'example-post',
+    title: 'Why breakfast isn\'t the most important meal of the day',
+    excerpt: 'You\'ve heard it your whole life. But the evidence tells a more nuanced story.',
+    date: '1 May 2026',
+  },
+  {
+    slug: 'example-post-2',
+    title: 'How to actually read a nutrition label',
+    excerpt: 'Food labels are designed to mislead. Here\'s what to actually look for.',
+    date: '15 April 2026',
+  },
+  {
+    slug: 'example-post-3',
+    title: 'Do I need protein powder?',
+    excerpt: 'Probably not. But let\'s talk about why — and when it might genuinely help.',
+    date: '1 April 2026',
+  },
+];
 ---
 
 <Layout title="Laura Reynolds Nutrition" description="No nonsense nutrition coaching for real life.">
@@ -8,43 +52,171 @@ import Layout from '../layouts/Layout.astro';
     <div class="hero-content">
       <h1>No nonsense<br />nutrition coaching.</h1>
       <p>Practical, personalised guidance to help you build a healthier relationship with food — without the fads.</p>
-      <div class="cta-group">
-        <a href="/enquire" class="btn-primary">Get Started</a>
-        <a href="/about" class="btn-secondary">About Laura</a>
+      <button class="btn-cta" data-open-enquiry>Get Started &nbsp;&rarr;</button>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <h2>How it works</h2>
+      <div class="steps">
+        {howItWorks.map(({ step, title, desc }) => (
+          <div class="step">
+            <span class="step-num">{step}</span>
+            <h3>{title}</h3>
+            <p>{desc}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- What I offer -->
-  <section class="offerings">
+  <!-- Latest Blog -->
+  <section class="blog-section">
     <div class="container">
-      <h2>What I offer</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>1:1 Coaching</h3>
-          <p>Tailored nutrition plans built around your lifestyle, goals, and food preferences.</p>
-        </div>
-        <div class="card">
-          <h3>Ongoing Support</h3>
-          <p>Regular check-ins and adjustments to keep you on track as life changes.</p>
-        </div>
-        <div class="card">
-          <h3>No-fad Approach</h3>
-          <p>Evidence-based advice. No cleanses, no cutting food groups, no nonsense.</p>
-        </div>
+      <div class="section-header">
+        <h2>From the blog</h2>
+        <a href="/blog" class="see-all">See all posts &nbsp;&rarr;</a>
+      </div>
+      <div class="blog-cards">
+        {blogPosts.map(({ slug, title, date, excerpt }) => (
+          <a href={`/blog/${slug}`} class="blog-card">
+            <div class="card-accent"></div>
+            <div class="card-body">
+              <span class="card-date">{date}</span>
+              <h3>{title}</h3>
+              <p>{excerpt}</p>
+              <span class="read-more">Read more &nbsp;&rarr;</span>
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- Blog teaser -->
-  <section class="blog-teaser">
-    <div class="container">
-      <h2>From the blog</h2>
-      <p class="subtitle">Practical tips and honest advice on nutrition and everyday eating.</p>
-      <a href="/blog" class="btn-outline">Read the blog</a>
+  <!-- Enquiry Modal -->
+  <dialog id="enquiry-modal">
+    <div class="modal-inner">
+      <div id="modal-form-view">
+        <div class="modal-header">
+          <h2>Get in touch</h2>
+          <button class="close-btn" id="close-modal" aria-label="Close">&times;</button>
+        </div>
+        <p class="modal-intro">Fill in the form and I'll be back in touch as soon as possible.</p>
+        <form
+          id="modal-form"
+          name="enquiry"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="enquiry" />
+          <p class="sr-only"><label>Don't fill this: <input name="bot-field" /></label></p>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="m-name">Your name <span class="req">*</span></label>
+              <input type="text" id="m-name" name="name" required autocomplete="name" placeholder="Jane Smith" />
+            </div>
+            <div class="field">
+              <label for="m-email">Email address <span class="req">*</span></label>
+              <input type="email" id="m-email" name="email" required autocomplete="email" placeholder="jane@example.com" />
+            </div>
+            <div class="field">
+              <label for="m-phone">Phone <span class="opt">(optional)</span></label>
+              <input type="tel" id="m-phone" name="phone" autocomplete="tel" placeholder="+44 7700 000000" />
+            </div>
+          </div>
+
+          <div class="field full-width">
+            <label for="m-goal">What are you hoping to achieve? <span class="req">*</span></label>
+            <textarea id="m-goal" name="goal" required rows="4" placeholder="Tell me a bit about your goals..."></textarea>
+          </div>
+
+          <div class="field full-width">
+            <label for="m-how">How did you hear about me? <span class="opt">(optional)</span></label>
+            <select id="m-how" name="how">
+              <option value="">— Select —</option>
+              <option value="instagram">Instagram</option>
+              <option value="friend">Friend / family</option>
+              <option value="google">Google search</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submit-btn">Send enquiry</button>
+        </form>
+      </div>
+
+      <div id="modal-success-view" hidden>
+        <div class="success-content">
+          <div class="success-tick">&#10003;</div>
+          <h2>Message sent!</h2>
+          <p>Thanks for getting in touch. I'll be back with you very soon.</p>
+        </div>
+      </div>
     </div>
-  </section>
+  </dialog>
 </Layout>
+
+<script>
+  const modal = document.getElementById('enquiry-modal') as HTMLDialogElement | null;
+  if (modal) {
+    const form = document.getElementById('modal-form') as HTMLFormElement;
+    const formView = document.getElementById('modal-form-view') as HTMLElement;
+    const successView = document.getElementById('modal-success-view') as HTMLElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const closeBtn = document.getElementById('close-modal');
+
+    let successTimer: ReturnType<typeof setTimeout>;
+
+    function resetModal() {
+      formView.hidden = false;
+      successView.hidden = true;
+      form.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send enquiry';
+    }
+
+    function closeModal() {
+      clearTimeout(successTimer);
+      modal!.close();
+      setTimeout(resetModal, 300);
+    }
+
+    // Any element with [data-open-enquiry] opens the modal — hero + header.
+    document.querySelectorAll('[data-open-enquiry]').forEach((el) =>
+      el.addEventListener('click', () => modal.showModal())
+    );
+
+    closeBtn?.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    modal.addEventListener('cancel', () => setTimeout(resetModal, 300)); // Escape key
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      try {
+        const params = new URLSearchParams();
+        new FormData(form).forEach((val, key) => params.append(key, val.toString()));
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+        });
+        formView.hidden = true;
+        successView.hidden = false;
+        successTimer = setTimeout(closeModal, 3500);
+      } catch {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send enquiry';
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  }
+</script>
 
 <style>
   .container {
@@ -55,148 +227,400 @@ import Layout from '../layouts/Layout.astro';
 
   /* ── Hero ── */
   .hero {
-    background-color: var(--coral);
-    color: var(--cream);
-    padding: 4rem 1.25rem;
+    padding: 6rem 1.25rem 5.5rem;
     text-align: center;
   }
 
   .hero-content {
-    max-width: 640px;
+    max-width: 620px;
     margin: 0 auto;
   }
 
   .hero h1 {
     font-family: var(--font);
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    line-height: 1.15;
-    margin-bottom: 1rem;
+    font-size: clamp(2.25rem, 8vw, 3.75rem);
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 1.25rem;
   }
 
   .hero p {
     font-size: 1.1rem;
-    line-height: 1.6;
+    line-height: 1.7;
+    color: var(--cream);
     opacity: 0.9;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
-  .cta-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: center;
-  }
-
-  .btn-primary {
+  .btn-cta {
+    display: inline-block;
     background-color: var(--brown);
     color: var(--cream);
-    padding: 0.85rem 2rem;
+    padding: 1rem 2.25rem;
+    border: none;
     border-radius: 4px;
-    text-decoration: none;
+    font-size: 1.05rem;
+    font-family: inherit;
     font-weight: 600;
-    font-size: 1rem;
+    cursor: pointer;
     transition: opacity 0.15s;
   }
 
-  .btn-primary:hover {
+  .btn-cta:hover {
     opacity: 0.85;
   }
 
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--cream);
-    padding: 0.85rem 2rem;
-    border-radius: 4px;
-    border: 2px solid var(--cream);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: background-color 0.15s;
+  /* ── How It Works ── */
+  .how-it-works {
+    padding: 5rem 1.25rem;
+    border-top: 1px solid rgba(253, 248, 245, 0.18);
   }
 
-  .btn-secondary:hover {
-    background-color: rgba(255,255,255,0.1);
-  }
-
-  /* ── Offerings ── */
-  .offerings {
-    padding: 4rem 0;
-  }
-
-  .offerings h2 {
+  .how-it-works h2 {
     font-family: var(--font);
-    font-size: 1.75rem;
-    color: var(--brown);
-    margin-bottom: 2rem;
+    font-size: clamp(1.6rem, 4vw, 2.25rem);
+    color: var(--cream);
     text-align: center;
+    margin-bottom: 3rem;
   }
 
-  .cards {
+  .steps {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
 
   @media (min-width: 640px) {
-    .cards {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .step {
+    background-color: rgba(253, 248, 245, 0.12);
+    border-radius: 10px;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .step-num {
+    display: block;
+    font-family: var(--font);
+    font-size: 2rem;
+    color: var(--cream);
+    opacity: 0.35;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+  }
+
+  .step h3 {
+    font-family: var(--font);
+    font-size: 1.05rem;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--cream);
+    opacity: 0.8;
+  }
+
+  /* ── Latest Blog ── */
+  .blog-section {
+    padding: 5rem 1.25rem 6rem;
+    border-top: 1px solid rgba(253, 248, 245, 0.18);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-header h2 {
+    font-family: var(--font);
+    font-size: clamp(1.6rem, 4vw, 2.25rem);
+    color: var(--cream);
+  }
+
+  .see-all {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.75;
+    transition: opacity 0.15s;
+  }
+
+  .see-all:hover {
+    opacity: 1;
+  }
+
+  .blog-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .blog-cards {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  .card {
-    background-color: white;
-    border: 1px solid var(--blush);
-    border-radius: 8px;
+  .blog-card {
+    background-color: var(--cream);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  .card-accent {
+    height: 5px;
+    background-color: var(--brown);
+  }
+
+  .card-body {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
   }
 
-  .card h3 {
+  .card-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .blog-card h3 {
     font-family: var(--font);
+    font-size: 1rem;
     color: var(--brown);
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+    line-height: 1.4;
   }
 
-  .card p {
+  .blog-card p {
+    font-size: 0.875rem;
     color: var(--text-muted);
     line-height: 1.6;
-    font-size: 0.95rem;
+    flex: 1;
   }
 
-  /* ── Blog teaser ── */
-  .blog-teaser {
-    background-color: var(--blush);
-    padding: 4rem 1.25rem;
+  .read-more {
+    font-size: 0.85rem;
+    color: var(--coral);
+    font-weight: 600;
+    margin-top: 0.25rem;
+  }
+
+  /* ── Modal ── */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  dialog {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    max-width: 540px;
+    width: 92%;
+    max-height: 90dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  }
+
+  dialog::backdrop {
+    background: rgba(45, 26, 14, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-inner {
+    background-color: var(--cream);
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-header h2 {
+    font-family: var(--font);
+    font-size: 1.5rem;
+    color: var(--brown);
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.1rem 0.25rem;
+    transition: color 0.15s;
+  }
+
+  .close-btn:hover {
+    color: var(--brown);
+  }
+
+  .modal-intro {
+    color: var(--text-muted);
+    font-size: 0.925rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .field.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brown);
+  }
+
+  .req { color: var(--coral); }
+
+  .opt {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid var(--blush);
+    border-radius: 6px;
+    font-size: max(16px, 1rem);
+    font-family: inherit;
+    background-color: white;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .btn-submit {
+    background-color: var(--coral);
+    color: var(--cream);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    align-self: flex-start;
+  }
+
+  .btn-submit:hover { opacity: 0.85; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  @media (max-width: 480px) {
+    .btn-submit { align-self: stretch; }
+  }
+
+  /* ── Success ── */
+  .success-content {
     text-align: center;
+    padding: 2.5rem 1rem;
   }
 
-  .blog-teaser h2 {
+  .success-tick {
+    font-size: 3rem;
+    color: var(--coral);
+    margin-bottom: 1rem;
+    line-height: 1;
+  }
+
+  .success-content h2 {
     font-family: var(--font);
     font-size: 1.75rem;
     color: var(--brown);
     margin-bottom: 0.75rem;
   }
 
-  .subtitle {
-    color: var(--brown);
-    opacity: 0.8;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-  }
-
-  .btn-outline {
-    display: inline-block;
-    border: 2px solid var(--brown);
-    color: var(--brown);
-    padding: 0.75rem 1.75rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.15s, color 0.15s;
-  }
-
-  .btn-outline:hover {
-    background-color: var(--brown);
-    color: var(--cream);
+  .success-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
   }
 </style>
