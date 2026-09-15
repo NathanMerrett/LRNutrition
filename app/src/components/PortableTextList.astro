@@ -1,0 +1,44 @@
+---
+/**
+ * Renders one (possibly nested) Portable Text list.
+ *
+ * Portable Text has no list elements — it emits a flat run of blocks carrying
+ * `listItem` and `level`. PortableText.astro turns that run into the tree this
+ * component walks, calling itself for each nested level.
+ */
+import PortableTextSpan from './PortableTextSpan.astro';
+import type { PortableTextBlock } from '../data/posts';
+
+export interface ListNode {
+  listItem: string;
+  items: ListItemNode[];
+}
+
+export interface ListItemNode {
+  block: PortableTextBlock;
+  children: ListNode[];
+}
+
+interface Props {
+  node: ListNode;
+}
+
+const { node } = Astro.props;
+const Tag = node.listItem === 'number' ? 'ol' : 'ul';
+---
+<Tag>
+  {
+    node.items.map((item) => (
+      <li>
+        {item.block.children?.map((span) => (
+          <PortableTextSpan
+            text={span.text ?? ''}
+            marks={span.marks ?? []}
+            markDefs={item.block.markDefs ?? []}
+          />
+        ))}
+        {item.children.map((child) => <Astro.self node={child} />)}
+      </li>
+    ))
+  }
+</Tag>

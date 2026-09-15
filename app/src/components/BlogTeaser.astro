@@ -1,0 +1,105 @@
+---
+import PostCard from './PostCard.astro';
+import type { PostSummary } from '../data/posts';
+
+interface Props {
+  posts: PostSummary[];
+}
+
+const { posts } = Astro.props;
+---
+
+<!-- The caller decides whether there is anything to show; this renders nothing
+     rather than an empty section heading. -->
+{
+  posts.length > 0 && (
+    <section class="blog-section">
+      <div class="container">
+        <header class="section-head reveal">
+          <div>
+            <p class="eyebrow">From the blog</p>
+            <h2>Honest reading on food</h2>
+          </div>
+          <a href="/blog" class="see-all">
+            See all posts <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </header>
+
+        <div class="blog-cards">
+          {posts.map((post, i) => (
+            <PostCard post={post} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .blog-section {
+    padding-block: var(--section-y);
+    background: linear-gradient(180deg, var(--cream) 0%, var(--blush-tint) 100%);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .eyebrow {
+    color: var(--coral-text);
+  }
+
+  .section-head h2 {
+    font-size: var(--text-h2);
+    color: var(--brown);
+  }
+
+  .see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--brown);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    /* 44px tap target without visually enlarging the link */
+    padding-block: 0.6rem;
+  }
+
+  .see-all .arrow {
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .see-all:hover {
+      color: var(--coral-text);
+    }
+
+    .see-all:hover .arrow {
+      transform: translateX(5px);
+    }
+  }
+
+  .blog-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 620px) {
+    .blog-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .blog-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -6,18 +6,24 @@ import Layout from '../layouts/Layout.astro';
   <section class="page-hero">
     <div class="container">
       <h1>Get in touch</h1>
-      <p>Fill in the form below and I'll get back to you as soon as I can.</p>
+      <p class="lede">Fill in the form below and I'll get back to you as soon as I can.</p>
     </div>
   </section>
 
   <section class="form-section">
-    <div class="container">
+    <div class="container container-form">
+      <!--
+        The one and only enquiry form. It posts normally and redirects to
+        /enquire/success — no JS, no fetch. Netlify detects it in the built
+        HTML at deploy time, so it must stay server-rendered.
+      -->
       <form
         name="enquiry"
         method="POST"
         data-netlify="true"
         netlify-honeypot="bot-field"
         action="/enquire/success"
+        class="reveal"
       >
         <!-- Netlify hidden field -->
         <input type="hidden" name="form-name" value="enquiry" />
@@ -54,58 +60,43 @@ import Layout from '../layouts/Layout.astro';
           </select>
         </div>
 
-        <button type="submit" class="btn-submit">Send enquiry</button>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary btn-submit">Send enquiry</button>
+          <p class="privacy-note">
+            Your details are only used to reply to your enquiry.
+            See the <a href="/privacy">privacy policy</a>.
+          </p>
+        </div>
       </form>
     </div>
   </section>
 </Layout>
 
 <style>
-  .container {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 0 1.25rem;
-  }
-
   .hidden {
     display: none;
   }
 
-  /* ── Page hero ── */
-  .page-hero {
-    background-color: var(--blush);
-    padding: 3rem 1.25rem;
-    text-align: center;
-  }
-
-  .page-hero h1 {
-    font-family: var(--font);
-    font-size: clamp(1.75rem, 6vw, 2.75rem);
-    color: var(--brown);
-    margin-bottom: 0.5rem;
-  }
-
-  .page-hero p {
-    color: var(--brown);
-    opacity: 0.8;
-    font-size: 1.05rem;
-  }
-
   /* ── Form ── */
   .form-section {
-    padding: 3rem 1.25rem 5rem;
+    padding-block: var(--section-y);
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-lg);
+    background-color: var(--surface);
+    border: 1px solid var(--brown-08);
+    border-radius: var(--radius-2xl);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: var(--shadow-md);
   }
 
   .field {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.45rem;
   }
 
   label {
@@ -115,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .required {
-    color: var(--coral);
+    color: var(--coral-text);
   }
 
   .optional {
@@ -123,22 +114,31 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text-muted);
   }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
   textarea,
   select {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1rem;
     border: 1.5px solid var(--blush);
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: inherit;
-    background-color: white;
-    color: var(--text);
-    transition: border-color 0.15s;
-    /* Prevent iOS zoom on focus */
+    border-radius: var(--radius-md);
+    /* max() prevents iOS zooming the page when a field is focused, which it
+       does for anything under 16px. */
     font-size: max(16px, 1rem);
+    font-family: inherit;
+    background-color: var(--blush-tint);
+    color: var(--text);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
   }
 
   input:focus,
@@ -146,35 +146,66 @@ import Layout from '../layouts/Layout.astro';
   select:focus {
     outline: none;
     border-color: var(--coral);
+    background-color: var(--surface);
+    /* A soft ring rather than a hard outline — still clearly visible. */
+    box-shadow: 0 0 0 4px rgba(209, 122, 106, 0.16);
+  }
+
+  /* Only flag an invalid field once the user has actually typed in it, so the
+     form doesn't turn red the moment it loads. */
+  input:not(:placeholder-shown):invalid,
+  textarea:not(:placeholder-shown):invalid {
+    border-color: var(--coral-600);
+  }
+
+  select {
+    /* Native arrow, drawn to match the palette. */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a4020' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 1.1em;
+    padding-right: 2.75rem;
   }
 
   textarea {
     resize: vertical;
-    min-height: 130px;
+    min-height: 140px;
+    line-height: 1.6;
   }
 
   .btn-submit {
-    background-color: var(--coral);
-    color: var(--cream);
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: inherit;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: opacity 0.15s;
     align-self: flex-start;
-    min-width: 160px;
+    min-width: 180px;
   }
 
-  .btn-submit:hover {
-    opacity: 0.85;
+  .submit-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+    padding-top: var(--space-xs);
+  }
+
+  .privacy-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .privacy-note a {
+    color: var(--coral-text);
+    font-weight: 600;
   }
 
   /* Full-width button on mobile */
   @media (max-width: 480px) {
     .btn-submit {
+      align-self: stretch;
+      width: 100%;
+    }
+
+    .submit-row {
       align-self: stretch;
     }
   }

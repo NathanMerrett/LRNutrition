@@ -1,23 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const credentials = [
+  'BSc Nutrition — [University name]',
+  'Registered with [Professional body]',
+  'Member of [Association]',
+];
 ---
 
 <Layout title="About | Laura Reynolds Nutrition" description="About Laura Reynolds, nutritionist.">
   <section class="page-hero">
     <div class="container">
       <h1>About Laura</h1>
-      <p>Registered nutritionist. Real food. No nonsense.</p>
+      <p class="lede">Registered nutritionist. Real food. No nonsense.</p>
     </div>
   </section>
 
   <section class="bio">
     <div class="container bio-grid">
-      <div class="bio-image-placeholder">
+      <div class="bio-media reveal">
         <!-- Replace with <img src="/laura.jpg" alt="Laura Reynolds" /> when ready -->
         <div class="image-box">Photo coming soon</div>
       </div>
-      <div class="bio-text">
-        <h2>Hi, I'm Laura</h2>
+
+      <div class="bio-text reveal" style="--i: 1">
+        <p class="eyebrow">Hi, I'm Laura</p>
+        <h2>Food advice that fits your actual life</h2>
         <p>
           I'm a registered nutritionist with a passion for helping people build a healthier,
           more relaxed relationship with food. I work with clients one-to-one to create
@@ -38,163 +46,178 @@ import Layout from '../layouts/Layout.astro';
 
   <section class="credentials">
     <div class="container">
-      <h2>Qualifications & credentials</h2>
-      <ul>
-        <li>BSc Nutrition — [University name]</li>
-        <li>Registered with [Professional body]</li>
-        <li>Member of [Association]</li>
+      <header class="section-head reveal">
+        <p class="eyebrow">Credentials</p>
+        <h2>Qualifications &amp; training</h2>
+      </header>
+      <ul class="cred-list">
+        {
+          credentials.map((item, i) => (
+            <li class="reveal" style={`--i: ${i}`}>
+              <span class="tick" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              {item}
+            </li>
+          ))
+        }
       </ul>
     </div>
   </section>
 
-  <section class="cta-strip">
-    <div class="container">
+  <section class="cta-band">
+    <div class="container container-narrow reveal">
       <h2>Ready to get started?</h2>
       <p>Get in touch and we can talk about what you're looking for.</p>
-      <a href="/enquire" class="btn-primary">Enquire now</a>
+      <a href="/enquire" class="btn btn-light">
+        Enquire now <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
     </div>
   </section>
 </Layout>
 
 <style>
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.25rem;
-  }
-
-  /* ── Page hero ── */
-  .page-hero {
-    background-color: var(--blush);
-    padding: 3rem 1.25rem;
-    text-align: center;
-  }
-
-  .page-hero h1 {
-    font-family: var(--font);
-    font-size: clamp(1.75rem, 6vw, 2.75rem);
-    color: var(--brown);
-    margin-bottom: 0.5rem;
-  }
-
-  .page-hero p {
-    color: var(--brown);
-    opacity: 0.8;
-    font-size: 1.05rem;
-  }
-
   /* ── Bio ── */
   .bio {
-    padding: 4rem 1.25rem;
+    padding-block: var(--section-y);
   }
 
   .bio-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    align-items: start;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 760px) {
     .bio-grid {
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: minmax(240px, 340px) 1fr;
     }
   }
 
   .image-box {
     width: 100%;
-    aspect-ratio: 3/4;
-    background-color: var(--blush);
-    border-radius: 8px;
+    aspect-ratio: 3 / 4;
+    background:
+      radial-gradient(circle at 30% 25%, var(--blush) 0%, transparent 60%),
+      linear-gradient(140deg, var(--blush-soft) 0%, var(--blush-tint) 100%);
+    border: 1px solid var(--brown-08);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--brown);
     font-size: 0.9rem;
-    opacity: 0.7;
+    opacity: 0.85;
+  }
+
+  .eyebrow {
+    color: var(--coral-text);
   }
 
   .bio-text h2 {
-    font-family: var(--font);
-    font-size: 1.5rem;
+    font-size: var(--text-h2);
     color: var(--brown);
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
   }
 
-  .bio-text p {
+  .bio-text p:not(.eyebrow) {
     color: var(--text-muted);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-    font-size: 0.975rem;
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+    font-size: 1rem;
+    max-width: 62ch;
+  }
+
+  .bio-text p:last-child {
+    margin-bottom: 0;
   }
 
   /* ── Credentials ── */
   .credentials {
-    background-color: white;
-    border-top: 1px solid var(--blush);
-    border-bottom: 1px solid var(--blush);
-    padding: 3rem 1.25rem;
+    background: linear-gradient(180deg, var(--blush-tint) 0%, var(--cream) 100%);
+    padding-block: var(--section-y);
   }
 
-  .credentials h2 {
-    font-family: var(--font);
+  .section-head {
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-head h2 {
+    font-size: var(--text-h2);
     color: var(--brown);
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
   }
 
-  .credentials ul {
+  .cred-list {
     list-style: none;
+    display: grid;
+    gap: var(--space-sm);
+    max-width: var(--container-prose);
+  }
+
+  .cred-list li {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .credentials li {
-    color: var(--text-muted);
-    padding-left: 1.25rem;
-    position: relative;
+    align-items: center;
+    gap: var(--space-sm);
+    background-color: var(--surface);
+    border: 1px solid var(--brown-08);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    color: var(--text);
     font-size: 0.975rem;
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--dur-mid) var(--ease-out),
+      box-shadow var(--dur-mid) var(--ease-out);
   }
 
-  .credentials li::before {
-    content: '–';
-    position: absolute;
-    left: 0;
-    color: var(--coral);
+  @media (hover: hover) {
+    .cred-list li:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-md);
+    }
   }
 
-  /* ── CTA strip ── */
-  .cta-strip {
-    padding: 4rem 1.25rem;
+  .tick {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: var(--blush-soft);
+    color: var(--coral-600);
+  }
+
+  .tick svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ── CTA band ── */
+  .cta-band {
+    background: var(--gradient-warm);
+    padding-block: var(--section-y);
     text-align: center;
   }
 
-  .cta-strip h2 {
-    font-family: var(--font);
-    font-size: 1.5rem;
-    color: var(--brown);
-    margin-bottom: 0.5rem;
-  }
-
-  .cta-strip p {
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    background-color: var(--coral);
+  .cta-band h2 {
+    font-size: var(--text-h2);
     color: var(--cream);
-    padding: 0.85rem 2rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: opacity 0.15s;
+    margin-bottom: var(--space-sm);
   }
 
-  .btn-primary:hover {
-    opacity: 0.85;
+  .cta-band p {
+    color: var(--cream);
+    font-size: 1.05rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .cta-band :global(.btn:focus-visible) {
+    outline-color: var(--cream);
+    outline-offset: 3px;
   }
 </style>

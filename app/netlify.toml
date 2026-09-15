@@ -1,7 +1,22 @@
+# This file lives in app/, not the repo root, so Netlify only reads it when the
+# site's base directory is set to "app" (Site settings → Build & deploy → Build
+# settings). If that is ever unset, none of this applies.
+
 [build]
   command = "astro build"
   publish = "dist"
-  ignore = "git diff --quiet HEAD^ HEAD -- ."
+
+  # Skip the build when the last commit changed nothing in app/ — a commit that
+  # only touches studio/ does not need the website rebuilt.
+  #
+  # The INCOMING_HOOK_TITLE check matters: Netlify sets it only for builds
+  # triggered by a build hook, which is how a Sanity publish rebuilds the site.
+  # Those builds have no new commit, so the git check below would always find
+  # "no changes" and cancel them — meaning newly published posts would never
+  # appear. Without this guard the content workflow silently does nothing.
+  #
+  # Exit 0 cancels the build; any other status lets it run.
+  ignore = "[ -z \"$INCOMING_HOOK_TITLE\" ] && git diff --quiet HEAD^ HEAD -- ."
 
 [build.environment]
   NODE_VERSION = "22.12.0"

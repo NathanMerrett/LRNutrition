@@ -1,0 +1,55 @@
+---
+/**
+ * Applies Portable Text marks to a run of text.
+ *
+ * Marks arrive as a flat list of names, e.g. ["strong", "a1b2c3"]. Some are
+ * decorators ("strong", "em", …); others are keys pointing at an entry in
+ * markDefs, which is how links are stored. Because marks nest, this component
+ * wraps the first mark and calls itself with the rest.
+ */
+export interface MarkDef {
+  _key: string;
+  _type: string;
+  href?: string;
+}
+
+interface Props {
+  text: string;
+  marks?: string[];
+  markDefs?: MarkDef[];
+}
+
+const { text, marks = [], markDefs = [] } = Astro.props;
+
+const [mark, ...rest] = marks;
+const def = mark ? markDefs.find((d) => d._key === mark) : undefined;
+
+const href = def?._type === 'link' ? def.href : undefined;
+// Anything that isn't a same-page or relative link leaves the site.
+const isExternal = !!href && /^(https?:)?\/\//.test(href);
+---
+{
+  mark === undefined ? (
+    <Fragment set:text={text} />
+  ) : href ? (
+    <a
+      href={href}
+      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      <Astro.self text={text} marks={rest} markDefs={markDefs} />
+    </a>
+  ) : mark === 'strong' ? (
+    <strong><Astro.self text={text} marks={rest} markDefs={markDefs} /></strong>
+  ) : mark === 'em' ? (
+    <em><Astro.self text={text} marks={rest} markDefs={markDefs} /></em>
+  ) : mark === 'code' ? (
+    <code><Astro.self text={text} marks={rest} markDefs={markDefs} /></code>
+  ) : mark === 'underline' ? (
+    <u><Astro.self text={text} marks={rest} markDefs={markDefs} /></u>
+  ) : mark === 'strike-through' ? (
+    <s><Astro.self text={text} marks={rest} markDefs={markDefs} /></s>
+  ) : (
+    /* Unknown mark — render the text rather than dropping it. */
+    <Astro.self text={text} marks={rest} markDefs={markDefs} />
+  )
+}

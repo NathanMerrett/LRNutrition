@@ -1,0 +1,218 @@
+---
+/**
+ * Renders a Sanity Portable Text body.
+ *
+ * Normally `astro-portabletext` would do this, but that dependency was declined,
+ * so this walks the block array itself. It covers what the post schema allows:
+ * `block` (styles, decorators, link annotations, lists) and `image`.
+ *
+ * The fiddly part is lists. Portable Text has no <ul>/<ol> — it emits a flat run
+ * of blocks carrying `listItem` and `level`, so consecutive items have to be
+ * collected back into real list elements. Rendering each item as its own <ul> is
+ * the classic bug here.
+ */
+import PortableTextBlockView from './PortableTextBlock.astro';
+import PortableTextList from './PortableTextList.astro';
+import type { ListNode } from './PortableTextList.astro';
+import type { PortableTextBlock } from '../data/posts';
+
+interface Props {
+  value?: PortableTextBlock[];
+}
+
+const { value = [] } = Astro.props;
+
+type Segment =
+  | { kind: 'lists'; blocks: PortableTextBlock[] }
+  | { kind: 'block'; block: PortableTextBlock };
+
+/** Collect runs of list blocks so they can become single list elements. */
+function segment(blocks: PortableTextBlock[]): Segment[] {
+  const segments: Segment[] = [];
+
+  for (const block of blocks) {
+    if (block._type === 'block' && block.listItem) {
+      const last = segments.at(-1);
+      if (last?.kind === 'lists') {
+        last.blocks.push(block);
+      } else {
+        segments.push({ kind: 'lists', blocks: [block] });
+      }
+    } else {
+      segments.push({ kind: 'block', block });
+    }
+  }
+
+  return segments;
+}
+
+/** Turn a flat run of list blocks into a tree, using each block's `level`. */
+function buildLists(blocks: PortableTextBlock[]): ListNode[] {
+  const roots: ListNode[] = [];
+  const stack: ListNode[] = []; // stack[n] is the open list at depth n + 1
+
+  for (const block of blocks) {
+    const level = Math.max(1, block.level ?? 1);
+    const listItem = block.listItem ?? 'bullet';
+
+    // Close any lists deeper than this item.
+    stack.length = Math.min(stack.length, level);
+
+    let current = stack[level - 1];
+
+    // Open a new list when there isn't one at this depth, or when the list type
+    // changes (a bulleted run followed by a numbered run is two lists).
+    if (!current || current.listItem !== listItem) {
+      const node: ListNode = { listItem, items: [] };
+      const parentItem = stack[level - 2]?.items.at(-1);
+
+      if (level === 1 || !parentItem) {
+        // Level 1, or malformed input that skips a level — keep the content
+        // rather than dropping it on the floor.
+        roots.push(node);
+      } else {
+        parentItem.children.push(node);
+      }
+
+      stack[level - 1] = node;
+      stack.length = level;
+      current = node;
+    }
+
+    current.items.push({ block, children: [] });
+  }
+
+  return roots;
+}
+
+const segments = segment(value);
+---
+
+<div class="portable-text">
+  {
+    segments.map((seg) =>
+      seg.kind === 'lists' ? (
+        buildLists(seg.blocks).map((node) => <PortableTextList node={node} />)
+      ) : (
+        <PortableTextBlockView block={seg.block} />
+      ),
+    )
+  }
+</div>
+
+<style>
+  /*
+   * Child components (lists, links) carry their own scope ids, so descendants
+   * are styled globally — scoped to this wrapper so it can't leak out.
+   */
+  .portable-text :global(p),
+  .portable-text :global(ul),
+  .portable-text :global(ol),
+  .portable-text :global(blockquote),
+  .portable-text :global(img) {
+    margin-bottom: var(--space-lg);
+  }
+
+  .portable-text :global(p) {
+    line-height: 1.8;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  .portable-text :global(h2),
+  .portable-text :global(h3),
+  .portable-text :global(h4),
+  .portable-text :global(h5),
+  .portable-text :global(h6) {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--brown);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    /* Generous space above a heading, tight below it, so each heading binds
+       visually to the text it introduces. */
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .portable-text :global(h2) {
+    font-size: 1.75rem;
+  }
+
+  .portable-text :global(h3) {
+    font-size: 1.35rem;
+  }
+
+  .portable-text :global(h4),
+  .portable-text :global(h5),
+  .portable-text :global(h6) {
+    font-size: 1.15rem;
+  }
+
+  .portable-text :global(ul),
+  .portable-text :global(ol) {
+    padding-left: var(--space-lg);
+  }
+
+  .portable-text :global(li) {
+    line-height: 1.8;
+    margin-bottom: var(--space-xs);
+  }
+
+  .portable-text :global(li)::marker {
+    color: var(--coral-text);
+  }
+
+  /* Nested lists sit tight against their parent item. */
+  .portable-text :global(li > ul),
+  .portable-text :global(li > ol) {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+  }
+
+  .portable-text :global(blockquote) {
+    position: relative;
+    background-color: var(--blush-tint);
+    border-left: 3px solid var(--coral-text);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: var(--space-lg);
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--brown);
+  }
+
+  .portable-text :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .portable-text :global(a) {
+    color: var(--coral-text);
+    font-weight: 600;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .portable-text :global(a:hover) {
+    color: var(--brown);
+  }
+
+  .portable-text :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .portable-text :global(code) {
+    font-size: 0.9em;
+    background-color: var(--blush-soft);
+    color: var(--brown-700);
+    padding: 0.15em 0.4em;
+    border-radius: var(--radius-sm);
+  }
+</style>

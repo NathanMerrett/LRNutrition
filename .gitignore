@@ -9,9 +9,12 @@ studio/dist/
 # env files
 .env
 .env.*
-!.env.example
 **/.env
 **/.env.*
+# ...but the templates must be committed. These negations have to come last:
+# an earlier `!.env.example` is undone by the `**/.env.*` rule above it.
+!.env.example
+!**/.env.example
 
 # sanity
 studio/.sanity/

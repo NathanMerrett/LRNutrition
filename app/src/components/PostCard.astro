@@ -1,0 +1,173 @@
+---
+import { formatDate, imageUrl, type PostSummary } from '../data/posts';
+
+interface Props {
+  post: PostSummary;
+  /** Index within its grid, used to stagger the reveal animation. */
+  index?: number;
+}
+
+const { post, index = 0 } = Astro.props;
+
+// 800x500 is a 1.6:1 crop, matching the card's aspect-ratio below. Sanity does
+// the cropping, so the browser never downloads pixels it then throws away.
+const thumb = imageUrl(post.mainImage, { width: 800, height: 500 });
+---
+
+<article class="card reveal" style={`--i: ${index}`}>
+  <a href={`/blog/${post.slug}`}>
+    <div class="card-media">
+      {
+        thumb ? (
+          <img
+            src={thumb}
+            alt={post.mainImage?.alt ?? ''}
+            width="800"
+            height="500"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          /* No image on the post — a warm gradient keeps every card the same
+             shape rather than leaving a ragged grid. */
+          <div class="card-media-fallback" aria-hidden="true" />
+        )
+      }
+    </div>
+
+    <div class="card-body">
+      <time datetime={post.publishedAt}>
+        {formatDate(post.publishedAt)}
+        {post.readingTime ? ` · ${post.readingTime} min read` : ''}
+      </time>
+      <h3>{post.title}</h3>
+      <p>{post.summary}</p>
+      <span class="read-more">
+        Read more <span class="arrow" aria-hidden="true">&rarr;</span>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card {
+    background-color: var(--surface);
+    border: 1px solid var(--brown-08);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--dur-mid) var(--ease-out),
+      box-shadow var(--dur-mid) var(--ease-out),
+      border-color var(--dur-mid) var(--ease-out);
+  }
+
+  .card a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ── Media ── */
+  .card-media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--blush-tint);
+  }
+
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .card-media-fallback {
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(circle at 25% 20%, var(--blush) 0%, transparent 55%),
+      linear-gradient(140deg, var(--blush-soft) 0%, var(--blush-tint) 100%);
+  }
+
+  /* ── Body ── */
+  .card-body {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+  }
+
+  time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .card h3 {
+    font-size: 1.2rem;
+    color: var(--brown);
+    line-height: 1.25;
+  }
+
+  .card p {
+    font-size: 0.925rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    /* Cap the summary so cards in a row stay close in height */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--coral-text);
+    font-weight: 600;
+    /* Push to the bottom so the link lines up across a row of cards */
+    margin-top: auto;
+    padding-top: var(--space-sm);
+  }
+
+  .read-more .arrow {
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  /* Hover only where hovering is real — on touch it sticks after a tap. */
+  @media (hover: hover) {
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--blush);
+    }
+
+    .card:hover .card-media img {
+      transform: scale(1.05);
+    }
+
+    .card:hover .read-more .arrow {
+      transform: translateX(5px);
+    }
+  }
+
+  /* The whole card is one link, so put the focus ring on the card. */
+  .card:focus-within {
+    outline: 3px solid var(--brown);
+    outline-offset: 3px;
+  }
+
+  .card a:focus-visible {
+    outline: none;
+  }
+</style>

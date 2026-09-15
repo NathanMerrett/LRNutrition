@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// DRAFT SKELETON — the structure and headings are standard for a UK sole-practitioner
+// site using Netlify Forms, but every [CONFIRM: …] placeholder below must be filled in
+// and the whole policy reviewed by Laura before this goes live. Do not publish as-is.
+
+const lastUpdated = '[CONFIRM: date this policy was reviewed]';
+---
+
+<Layout
+  title="Privacy Policy | Laura Reynolds Nutrition"
+  description="How Laura Reynolds Nutrition collects, uses and stores your personal data."
+>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Privacy policy</h1>
+      <p class="lede">How your information is collected, used and stored.</p>
+    </div>
+  </section>
+
+  <section class="prose-section">
+    <div class="container container-prose prose">
+      <p class="meta">Last updated: {lastUpdated}</p>
+
+      <h2>Who I am</h2>
+      <p>
+        This site is run by Laura Reynolds, trading as Laura Reynolds Nutrition
+        [CONFIRM: registered business name and address, and ICO registration number if
+        one is held]. I am the data controller for any personal information you send
+        through this website.
+      </p>
+      <p>
+        If you have any questions about this policy, or want a copy of the information
+        held about you, email
+        <a href="mailto:hello@lrnutrition.co.uk">hello@lrnutrition.co.uk</a>.
+      </p>
+
+      <h2>What I collect</h2>
+      <p>
+        If you fill in the enquiry form, I collect the details you choose to give me:
+        your name, your email address, your phone number if you provide one, what you
+        tell me about what you are hoping to achieve, and how you heard about me.
+      </p>
+      <p>
+        That is the only personal data this website collects. There are no analytics,
+        advertising or tracking cookies on this site. [CONFIRM: still true if analytics
+        are added later.]
+      </p>
+
+      <h2>Why I collect it, and the lawful basis</h2>
+      <p>
+        I use your details for one purpose: to reply to your enquiry and, if you go on
+        to work with me, to arrange and provide that coaching. The lawful basis is
+        legitimate interest — responding to someone who has deliberately contacted me —
+        and, once you become a client, performance of a contract.
+      </p>
+      <p>
+        I will not add you to a mailing list, and I will not use your details for
+        marketing unless you separately ask me to.
+      </p>
+
+      <h2>Who else sees it</h2>
+      <p>
+        Enquiries submitted through this site are processed by Netlify, who host the
+        website and pass form submissions on to me by email. Your message is then held
+        in my email account, provided by [CONFIRM: email provider, e.g. Google
+        Workspace]. Both act as data processors on my behalf.
+      </p>
+      <p>
+        I do not sell your data, and I do not share it with anyone else unless I am
+        legally required to.
+      </p>
+
+      <h2>How long it is kept</h2>
+      <p>
+        Enquiries that do not become client relationships are deleted after [CONFIRM:
+        retention period, e.g. 12 months]. Client records are kept for [CONFIRM:
+        retention period — check the requirements of Laura's professional body and
+        insurer, which usually set a minimum].
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        Under UK GDPR you can ask me to show you what data I hold about you, correct it
+        if it is wrong, delete it, or restrict how I use it. Email the address above and
+        I will respond within one month.
+      </p>
+      <p>
+        If you are not happy with how I have handled your data, you can complain to the
+        Information Commissioner's Office at
+        <a href="https://ico.org.uk" rel="noopener noreferrer">ico.org.uk</a>.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        If this policy changes, the updated version will appear on this page with a new
+        "last updated" date.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ── Prose ── */
+  .prose-section {
+    padding-block: var(--section-y);
+  }
+
+  .prose h2 {
+    font-size: 1.45rem;
+    color: var(--brown);
+    margin-top: 2.75rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .prose p {
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+  }
+
+  .prose a {
+    color: var(--coral-text);
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+
+  /* Draft placeholders are deliberately loud — they must not reach production
+     unnoticed. Styled by content, so they disappear once the text is filled in. */
+  .meta {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background-color: var(--blush-tint);
+    border: 1px solid var(--blush);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+</style>

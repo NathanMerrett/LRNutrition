@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -8,6 +10,16 @@ const {
   title = 'Laura Reynolds Nutrition',
   description = 'No nonsense nutrition coaching',
 } = Astro.props;
+
+const navLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/blog', label: 'Blog' },
+];
+
+// Trailing slashes vary between dev and the built output, so normalise before
+// comparing — otherwise /blog never matches /blog/ and nothing is ever current.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
 ---
 
 <!doctype html>
@@ -19,20 +31,56 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Preload the two variable fonts. They are same-origin and discovered
+         late (inside a CSS file), so without this they start downloading only
+         after the stylesheet parses, and headings flash in the fallback. -->
+    <link
+      rel="preload"
+      href="/fonts/fraunces-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <title>{title}</title>
   </head>
   <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
     <header>
       <div class="header-inner">
         <a href="/" class="logo-link">
-          <img src="/logo.svg" alt="Laura Reynolds Nutrition" class="logo-img" />
+          <img src="/logo.svg" alt="Laura Reynolds Nutrition" class="logo-img" width="40" height="40" />
           <span class="logo-text">LR Nutrition</span>
         </a>
-        <button class="btn-header-cta" id="header-get-started">Get Started</button>
+
+        <nav aria-label="Main">
+          <ul>
+            {
+              navLinks.map(({ href, label }) => (
+                <li>
+                  <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>
+                    {label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <a href="/enquire" class="btn btn-primary btn-header">Get Started</a>
       </div>
     </header>
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 
@@ -92,96 +140,60 @@ const {
   </body>
 </html>
 
-<script>
-  // Prevent body scroll when modal is open
-  const modal = document.getElementById('enquiry-modal') as HTMLDialogElement;
-
-  if (modal) {
-    modal.addEventListener('open', () => {
-      document.documentElement.style.overflow = 'hidden';
-    });
-
-    modal.addEventListener('close', () => {
-      document.documentElement.style.overflow = '';
-    });
-
-    // Also listen for showModal() and close()
-    const originalShowModal = modal.showModal.bind(modal);
-    modal.showModal = function() {
-      document.documentElement.style.overflow = 'hidden';
-      return originalShowModal();
-    };
-
-    const originalClose = modal.close.bind(modal);
-    modal.close = function() {
-      document.documentElement.style.overflow = '';
-      return originalClose();
-    };
-  }
-
-  // Link header button to modal
-  const headerBtn = document.getElementById('header-get-started');
-  headerBtn?.addEventListener('click', () => {
-    modal?.showModal();
-  });
-</script>
-
 <style>
-  :root {
-    --coral: #D17A6A;
-    --blush: #F0C0B0;
-    --brown: #7A4020;
-    --cream: #FDF8F5;
-    --text: #2d1a0e;
-    --text-muted: #7a6a62;
-    --font: Georgia, 'Times New Roman', serif;
-    --font-sans: system-ui, -apple-system, sans-serif;
+  /* ── Skip link ── */
+  .skip-link {
+    position: absolute;
+    left: var(--space-md);
+    top: -100px;
+    z-index: 100;
+    background-color: var(--brown);
+    color: var(--cream);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: top var(--dur-fast) var(--ease-out);
   }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    font-family: var(--font-sans);
-    font-size: 16px;
-    background-color: var(--coral);
-    color: var(--text);
-  }
-
-  body {
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
+  .skip-link:focus-visible {
+    top: var(--space-md);
   }
 
   /* ── Header ── */
   header {
-    background-color: var(--cream);
-    border-bottom: 1px solid rgba(122, 64, 32, 0.12);
     position: sticky;
     top: 0;
     z-index: 10;
+    background-color: rgba(253, 248, 245, 0.82);
+    border-bottom: 1px solid var(--brown-08);
+    /* Frosted glass, where supported. The solid-ish background above is the
+       fallback, so text stays legible without it. */
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    /* Keep the header out of the view transition's cross-fade so it appears
+       to stay put between pages rather than blinking. */
+    view-transition-name: site-header;
   }
 
   .header-inner {
-    max-width: 1100px;
+    max-width: var(--container-wide);
     margin: 0 auto;
-    padding: 0.9rem 1.25rem;
+    padding: var(--space-sm) var(--gutter);
+    /* Respect the notch in landscape on iOS */
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-md);
   }
 
   .logo-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-sm);
     text-decoration: none;
-    flex: 1;
+    margin-right: auto;
   }
 
   .logo-img {
@@ -191,43 +203,89 @@ const {
   }
 
   .logo-text {
-    font-family: var(--font);
+    font-family: var(--font-serif);
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--brown);
+    letter-spacing: -0.01em;
   }
 
-  .btn-header-cta {
-    background-color: var(--coral);
-    color: var(--cream);
-    padding: 0.65rem 1.25rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
+  /* ── Nav ── */
+  nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 3vw, 1.75rem);
+  }
+
+  nav a {
+    position: relative;
+    display: block;
+    padding: var(--space-xs) 0;
+    color: var(--brown);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0.75;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  /* Underline that grows out from the centre, rather than a hard border. */
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background-color: var(--coral-text);
+    transform: scaleX(0);
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    nav a:hover {
+      opacity: 1;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  nav a[aria-current='page'] {
+    opacity: 1;
     font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: opacity 0.15s;
+  }
+
+  nav a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .btn-header {
+    padding: 0.6rem 1.15rem;
+    font-size: 0.9rem;
     white-space: nowrap;
   }
 
-  .btn-header-cta:hover {
-    opacity: 0.85;
-  }
-
-  @media (max-width: 480px) {
-    .btn-header-cta {
-      padding: 0.55rem 1rem;
-      font-size: 0.85rem;
-    }
-
+  @media (max-width: 560px) {
     .logo-text {
       display: none;
     }
 
     .logo-img {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
+    }
+
+    nav a {
+      font-size: 0.9rem;
+    }
+
+    .btn-header {
+      padding: 0.55rem 0.95rem;
+      font-size: 0.85rem;
     }
   }
 
@@ -240,20 +298,24 @@ const {
   footer {
     background-color: var(--brown);
     color: var(--blush);
+    /* Fill the home-indicator area on iOS instead of leaving a pale strip. */
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .footer-inner {
-    max-width: 1100px;
+    max-width: var(--container-wide);
     margin: 0 auto;
-    padding: 3rem 1.25rem 1.5rem;
+    padding: var(--space-3xl) var(--gutter) var(--space-lg);
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
   }
 
   .footer-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: var(--space-xl);
     padding-bottom: 2.5rem;
-    border-bottom: 1px solid rgba(240, 192, 176, 0.2);
+    border-bottom: 1px solid var(--blush-20);
   }
 
   @media (min-width: 640px) {
@@ -263,27 +325,28 @@ const {
   }
 
   .footer-name {
-    font-family: var(--font);
-    font-size: 1.1rem;
-    font-weight: bold;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
     color: var(--cream);
     margin-bottom: 0.6rem;
-    line-height: 1.3;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
   }
 
   .footer-tagline {
     font-size: 0.85rem;
-    opacity: 0.7;
     line-height: 1.55;
   }
 
   .footer-col h4 {
+    font-family: var(--font-sans);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.09em;
     color: var(--cream);
-    opacity: 0.6;
+    opacity: 0.8;
     margin-bottom: 0.9rem;
   }
 
@@ -291,14 +354,14 @@ const {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-xs);
   }
 
   .footer-col a {
     color: var(--blush);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.15s;
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
   .footer-col a:hover {
@@ -307,7 +370,6 @@ const {
 
   .footer-col p {
     font-size: 0.9rem;
-    opacity: 0.85;
   }
 
   .social-icons {
@@ -319,11 +381,11 @@ const {
   .social-link {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     color: var(--blush);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.15s;
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
   .social-link:hover {
@@ -333,17 +395,17 @@ const {
   .footer-bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
+    gap: var(--space-sm) var(--space-lg);
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.25rem;
+    padding-top: var(--space-md);
     font-size: 0.78rem;
-    opacity: 0.6;
+    opacity: 0.85;
   }
 
   .footer-legal {
     display: flex;
-    gap: 1.25rem;
+    gap: var(--space-lg);
   }
 
   .footer-legal a {

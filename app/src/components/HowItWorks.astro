@@ -1,0 +1,170 @@
+---
+const steps = [
+  {
+    step: '01',
+    title: 'Share your story',
+    desc: 'Tell me where you are and where you want to be. No judgement — just an honest conversation about your life, goals, and history with food.',
+  },
+  {
+    step: '02',
+    title: 'Honest consultation',
+    desc: "We'll look at what's actually going on — your habits, your patterns, and what's really getting in the way.",
+  },
+  {
+    step: '03',
+    title: 'Building new habits',
+    desc: "Together we'll build practical, sustainable changes that fit your real life — not an idealised version of it.",
+  },
+  {
+    step: '04',
+    title: 'Staying accountable',
+    desc: 'Ongoing support and check-ins to keep you on track, adjust as life changes, and celebrate real progress.',
+  },
+];
+---
+
+<section class="how-it-works">
+  <div class="container">
+    <header class="section-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2>Four steps, no gimmicks</h2>
+      <p class="lede">A simple process built around your life, not a template.</p>
+    </header>
+
+    <ol class="steps">
+      {
+        steps.map(({ step, title, desc }, i) => (
+          <li class="step reveal" style={`--i: ${i}`}>
+            <span class="step-num" aria-hidden="true">
+              {step}
+            </span>
+            <h3>{title}</h3>
+            <p>{desc}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .how-it-works {
+    padding-block: var(--section-y);
+    background-color: var(--cream);
+  }
+
+  /* ── Section header ── */
+  .section-head {
+    text-align: center;
+    max-width: 48ch;
+    margin: 0 auto clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .eyebrow {
+    color: var(--coral-text);
+  }
+
+  .section-head h2 {
+    font-size: var(--text-h2);
+    color: var(--brown);
+    margin-bottom: var(--space-sm);
+  }
+
+  .lede {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  /* ── Steps ── */
+  .steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    counter-reset: step;
+  }
+
+  @media (min-width: 620px) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .step {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--surface);
+    border: 1px solid var(--brown-08);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--dur-mid) var(--ease-out),
+      box-shadow var(--dur-mid) var(--ease-out),
+      border-color var(--dur-mid) var(--ease-out);
+  }
+
+  /* Accent bar down the left edge, which grows in on hover. */
+  .step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--coral), var(--blush));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--blush);
+    }
+
+    .step:hover::before {
+      transform: scaleY(1);
+    }
+
+    .step:hover .step-num {
+      color: var(--coral);
+      opacity: 1;
+    }
+  }
+
+  .step-num {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: var(--blush);
+    line-height: 1;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.03em;
+    transition:
+      color var(--dur-mid) var(--ease-out),
+      opacity var(--dur-mid) var(--ease-out);
+  }
+
+  .step h3 {
+    font-size: 1.1rem;
+    color: var(--brown);
+    margin-bottom: var(--space-xs);
+    line-height: 1.25;
+  }
+
+  .step p {
+    font-size: 0.925rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+</style>
