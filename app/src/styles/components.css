@@ -1,0 +1,279 @@
+/*
+ * Shared building blocks used on more than one page. Anything genuinely
+ * specific to one component belongs in that component's scoped <style>.
+ *
+ * These sit in the `components` layer, so a component's scoped styles
+ * (which are unlayered) always win over them without specificity tricks.
+ */
+
+@layer components {
+  /* ── Layout ── */
+  .container {
+    width: 100%;
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .container-prose {
+    max-width: var(--container-prose);
+  }
+
+  .container-form {
+    max-width: var(--container-form);
+  }
+
+  .container-narrow {
+    max-width: var(--container-narrow);
+  }
+
+  /* Vertical rhythm for a full-width page section. */
+  .section {
+    padding-block: var(--section-y);
+  }
+
+  /* ── Buttons ──
+   * .btn-primary     main action: espresso with a cream label
+   * .btn-secondary   quieter action: espresso outline
+   * Both work on the page background and inside a coral or blush .band.
+   */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    min-height: var(--tap-target);
+    padding: var(--space-sm) var(--space-lg);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-label);
+    letter-spacing: var(--tracking-label);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  /* Hover only where hovering is real. On touch, :hover sticks after a tap
+     and leaves the button looking stuck in a pressed state. */
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      color: var(--color-text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Only the background tints; the label stays espresso so it keeps
+       4.5:1 even over the coral band. */
+    .btn-secondary:hover {
+      background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    }
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  /* Pressed states. On a phone there is no hover, so this is the feedback
+     a tap gets. */
+  .btn-primary:active {
+    background-color: var(--color-primary-hover);
+  }
+
+  .btn-secondary:active {
+    background-color: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    background-color: var(--color-border);
+    border-color: transparent;
+    color: var(--color-text-muted);
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  /* The arrow inside a button nudges forward on hover. */
+  .btn .arrow {
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .btn:hover .arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  /* ── Text ── */
+
+  /* A small label above a section heading. Sentence case, not all caps. */
+  .eyebrow {
+    display: block;
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-small);
+    letter-spacing: var(--tracking-small);
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+  }
+
+  /* An introductory paragraph under a heading. */
+  .lede {
+    color: var(--color-text-muted);
+  }
+
+  /* A small pill for short status text, e.g. "Last updated". Text on the
+     accent must be --color-text: primary and muted both fail contrast. */
+  .badge {
+    display: inline-block;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    letter-spacing: var(--tracking-small);
+    color: var(--color-text);
+    background-color: var(--color-accent);
+    border-radius: var(--radius-pill);
+    padding: var(--space-2xs) var(--space-sm);
+  }
+
+  /* ── Surfaces ── */
+
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* A full-width band of colour: coral by default, blush with .band-soft.
+     Text inside is always --color-text: espresso is 6.1:1 on coral and 11:1
+     on blush, but muted text fails on both. Never dim it with opacity. */
+  .band {
+    background-color: var(--color-brand);
+    color: var(--color-text);
+  }
+
+  .band-soft {
+    background-color: var(--color-accent);
+  }
+
+  .band :is(h1, h2, h3, p, .eyebrow, .lede) {
+    color: var(--color-text);
+  }
+
+  /* The light header band at the top of every inner page. */
+  .page-hero {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-2xl);
+    text-align: center;
+  }
+
+  .page-hero h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-hero .lede {
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+
+  /* The closing call-to-action band. Pair with .band (usually .band-soft). */
+  .cta-band {
+    padding-block: var(--section-y);
+    text-align: center;
+  }
+
+  .cta-band h2 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .cta-band p {
+    max-width: 42ch;
+    margin: 0 auto var(--space-xl);
+  }
+
+  /* ── Long-form text ──
+   * Legal pages and blog post bodies. Styles descendants directly, because
+   * Portable Text renders through child components with their own scope ids.
+   */
+  .prose > :first-child {
+    margin-top: 0;
+  }
+
+  .prose :is(p, ul, ol, blockquote, img) {
+    margin-bottom: var(--space-md);
+  }
+
+  /* Generous space above a heading, tight below it, so each heading binds
+     visually to the text it introduces. */
+  .prose :is(h2, h3, h4, h5, h6) {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose :is(ul, ol) {
+    padding-left: var(--space-lg);
+  }
+
+  .prose li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .prose li::marker {
+    color: var(--color-primary);
+  }
+
+  /* Nested lists sit tight against their parent item. */
+  .prose li > :is(ul, ol) {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+  }
+
+  /* A pull-quote: the one place besides headings that uses Fraunces. */
+  .prose blockquote {
+    border-left: 3px solid var(--color-primary);
+    padding: var(--space-xs) 0 var(--space-xs) var(--space-lg);
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+  }
+
+  .prose img {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .prose code {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    padding: 0 var(--space-2xs);
+    border-radius: var(--radius-sm);
+  }
+}

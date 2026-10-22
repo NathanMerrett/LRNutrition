@@ -13,7 +13,8 @@ const {
 
 const navLinks = [
   { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/services', label: 'Services' },
+  { href: '/blog', label: 'Balanced Bite Blog' },
 ];
 
 // Trailing slashes vary between dev and the built output, so normalise before
@@ -28,13 +29,12 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Preload the two variable fonts. They are same-origin and discovered
-         late (inside a CSS file), so without this they start downloading only
-         after the stylesheet parses, and headings flash in the fallback. -->
+    <!-- Preload the two self-hosted variable fonts. They are discovered late
+         (inside a CSS file), so without this they start downloading only after
+         the stylesheet parses, and text flashes in the fallback. -->
     <link
       rel="preload"
       href="/fonts/fraunces-latin-var.woff2"
@@ -44,7 +44,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     />
     <link
       rel="preload"
-      href="/fonts/inter-latin-var.woff2"
+      href="/fonts/dm-sans-latin-var.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -58,11 +58,11 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     <header>
       <div class="header-inner">
         <a href="/" class="logo-link">
-          <img src="/logo.svg" alt="Laura Reynolds Nutrition" class="logo-img" width="40" height="40" />
+          <img src="/logo.webp" alt="Laura Reynolds Nutrition" class="logo-img" width="40" height="40" />
           <span class="logo-text">LR Nutrition</span>
         </a>
 
-        <nav aria-label="Main">
+        <nav class="site-nav" aria-label="Main">
           <ul>
             {
               navLinks.map(({ href, label }) => (
@@ -76,7 +76,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
           </ul>
         </nav>
 
-        <a href="/enquire" class="btn btn-primary btn-header">Get Started</a>
+        <a href="/enquire" class="btn btn-primary btn-header">Get started</a>
       </div>
     </header>
 
@@ -92,23 +92,26 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
             <p class="footer-tagline">No nonsense nutrition coaching for real life.</p>
           </div>
 
-          <div class="footer-col">
-            <h4>Quick links</h4>
+          <!-- A labelled nav: on phones the header links are hidden, so this is
+               the site navigation landmark there. -->
+          <nav class="footer-col" aria-labelledby="footer-nav-heading">
+            <h2 id="footer-nav-heading">Quick links</h2>
             <ul>
               <li><a href="/">Home</a></li>
               <li><a href="/about">About Laura</a></li>
+              <li><a href="/services">Services</a></li>
               <li><a href="/blog">Blog</a></li>
               <li><a href="/enquire">Enquire</a></li>
             </ul>
-          </div>
+          </nav>
 
           <div class="footer-col">
-            <h4>Get in touch</h4>
+            <h2>Get in touch</h2>
             <p><a href="mailto:hello@lrnutrition.co.uk">hello@lrnutrition.co.uk</a></p>
           </div>
 
           <div class="footer-col">
-            <h4>Follow along</h4>
+            <h2>Follow along</h2>
             <div class="social-icons">
               <a href="#" aria-label="Instagram" class="social-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -131,8 +134,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
         <div class="footer-bottom">
           <p>&copy; {new Date().getFullYear()} Laura Reynolds Nutrition. All rights reserved.</p>
           <div class="footer-legal">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
+            <a href="/privacy">Privacy policy</a>
+            <a href="/terms">Terms of service</a>
           </div>
         </div>
       </div>
@@ -147,12 +150,12 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     left: var(--space-md);
     top: -100px;
     z-index: 100;
-    background-color: var(--brown);
-    color: var(--cream);
+    background-color: var(--color-text);
+    color: var(--color-text-inverse);
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-sm);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     transition: top var(--dur-fast) var(--ease-out);
   }
 
@@ -165,10 +168,10 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: rgba(253, 248, 245, 0.82);
-    border-bottom: 1px solid var(--brown-08);
-    /* Frosted glass, where supported. The solid-ish background above is the
-       fallback, so text stays legible without it. */
+    background-color: color-mix(in srgb, var(--color-bg) 85%, transparent);
+    border-bottom: 1px solid var(--color-border);
+    /* Frosted glass, where supported. The mostly-opaque background above is
+       the fallback, so text stays legible without it. */
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     /* Keep the header out of the view transition's cross-fade so it appears
@@ -179,7 +182,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
   .header-inner {
     max-width: var(--container-wide);
     margin: 0 auto;
-    padding: var(--space-sm) var(--gutter);
+    padding: var(--space-xs) var(--gutter);
     /* Respect the notch in landscape on iOS */
     padding-left: max(var(--gutter), env(safe-area-inset-left));
     padding-right: max(var(--gutter), env(safe-area-inset-right));
@@ -192,6 +195,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     display: flex;
     align-items: center;
     gap: var(--space-sm);
+    min-height: var(--tap-target);
     text-decoration: none;
     margin-right: auto;
   }
@@ -202,70 +206,82 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     display: block;
   }
 
+  /* The wordmark is the brand, so it keeps the heading face. */
   .logo-text {
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--brown);
-    letter-spacing: -0.01em;
+    font-family: var(--font-heading);
+    font-size: var(--text-label);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h3);
+    color: var(--color-text);
   }
 
-  /* ── Nav ── */
-  nav ul {
+  /* ── Nav ──
+   * Phones get just the logo and "Get started"; the page links live in the
+   * homepage sections and the footer. From 640px there is room to show them.
+   */
+  .site-nav {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .site-nav {
+      display: block;
+    }
+  }
+
+  .site-nav ul {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, 3vw, 1.75rem);
+    gap: clamp(var(--space-sm), 3vw, var(--space-xl));
   }
 
-  nav a {
+  .site-nav a {
     position: relative;
-    display: block;
-    padding: var(--space-xs) 0;
-    color: var(--brown);
+    display: flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    color: var(--color-text-muted);
     text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    opacity: 0.75;
-    transition: opacity var(--dur-fast) var(--ease-out);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
   }
 
   /* Underline that grows out from the centre, rather than a hard border. */
-  nav a::after {
+  .site-nav a::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: var(--space-xs);
     height: 2px;
     border-radius: var(--radius-pill);
-    background-color: var(--coral-text);
+    background-color: var(--color-primary);
     transform: scaleX(0);
     transition: transform var(--dur-mid) var(--ease-out);
   }
 
   @media (hover: hover) {
-    nav a:hover {
-      opacity: 1;
+    .site-nav a:hover {
+      color: var(--color-text);
     }
 
-    nav a:hover::after {
+    .site-nav a:hover::after {
       transform: scaleX(1);
     }
   }
 
-  nav a[aria-current='page'] {
-    opacity: 1;
-    font-weight: 600;
+  .site-nav a[aria-current='page'] {
+    color: var(--color-text);
+    font-weight: var(--weight-semibold);
   }
 
-  nav a[aria-current='page']::after {
+  .site-nav a[aria-current='page']::after {
     transform: scaleX(1);
   }
 
   .btn-header {
-    padding: 0.6rem 1.15rem;
-    font-size: 0.9rem;
+    padding-inline: var(--space-md);
     white-space: nowrap;
   }
 
@@ -278,15 +294,6 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
       width: 34px;
       height: 34px;
     }
-
-    nav a {
-      font-size: 0.9rem;
-    }
-
-    .btn-header {
-      padding: 0.55rem 0.95rem;
-      font-size: 0.85rem;
-    }
   }
 
   /* ── Main ── */
@@ -294,10 +301,13 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     flex: 1;
   }
 
-  /* ── Footer ── */
+  /* ── Footer ──
+   * A dark band: --color-text as the background, inverse text on top (13.8:1).
+   * Hierarchy comes from size and weight, never from opacity.
+   */
   footer {
-    background-color: var(--brown);
-    color: var(--blush);
+    background-color: var(--color-text);
+    color: var(--color-text-inverse);
     /* Fill the home-indicator area on iOS instead of leaving a pale strip. */
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -314,8 +324,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-xl);
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid var(--blush-20);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-text-muted);
   }
 
   @media (min-width: 640px) {
@@ -325,95 +335,86 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
   }
 
   .footer-name {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 0.6rem;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+    margin-bottom: var(--space-xs);
   }
 
   .footer-tagline {
-    font-size: 0.85rem;
-    line-height: 1.55;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
   }
 
-  .footer-col h4 {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--cream);
-    opacity: 0.8;
-    margin-bottom: 0.9rem;
+  /* Column labels are real headings (for screen-reader navigation), styled as
+     small labels rather than display type. */
+  .footer-col h2 {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-small);
+    letter-spacing: var(--tracking-small);
+    color: var(--color-text-inverse);
+    margin-bottom: var(--space-xs);
   }
 
   .footer-col ul {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .footer-col a {
-    color: var(--blush);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color var(--dur-fast) var(--ease-out);
-  }
-
-  .footer-col a:hover {
-    color: var(--cream);
-  }
-
-  .footer-col p {
-    font-size: 0.9rem;
   }
 
   .social-icons {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    align-items: flex-start;
   }
 
-  .social-link {
-    display: flex;
+  /* Links keep a 44px tap target; the padding grows, not the text. */
+  .footer-col a {
+    display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    color: var(--blush);
+    min-height: var(--tap-target);
+    color: var(--color-text-inverse);
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .social-link:hover {
-    color: var(--cream);
+  .footer-legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    color: var(--color-text-inverse);
+  }
+
+  @media (hover: hover) {
+    .footer-col a:hover {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    .footer-legal a:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  footer :focus-visible {
+    outline-color: var(--color-text-inverse);
   }
 
   .footer-bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm) var(--space-lg);
+    gap: 0 var(--space-lg);
     justify-content: space-between;
     align-items: center;
-    padding-top: var(--space-md);
-    font-size: 0.78rem;
-    opacity: 0.85;
+    padding-top: var(--space-sm);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
   }
 
   .footer-legal {
     display: flex;
     gap: var(--space-lg);
-  }
-
-  .footer-legal a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .footer-legal a:hover {
-    text-decoration: underline;
   }
 </style>

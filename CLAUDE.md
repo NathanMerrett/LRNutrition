@@ -5,7 +5,7 @@
 Laura Reynolds Nutrition: a marketing site for a nutrition coaching practice.
 The client writes and publishes blog posts herself in Sanity Studio.
 
-This is a lean brochure site, not an app. Prefer the simplest solution that works.
+This is a lean brochure site, not an app.
 
 ### Repo layout
 
@@ -20,20 +20,19 @@ There is no package at the repo root. All `npm` commands run inside one of these
 
 Multi-page, not a single scrolling homepage:
 
-- `/` — hero, how it works, blog teaser
+- `/` — hero, how it works, services teaser, blog teaser
 - `/about` — bio and credentials
+- `/services` — services, prices and the introductory offer. Data lives in `app/src/data/services.ts`, shared with the homepage teaser
 - `/blog` and `/blog/[slug]`
 - `/enquire` and `/enquire/success`
 - `/privacy` and `/terms`
 
 ## Stack
 
-- Astro with static output. No SSR adapter.
+- Astro with static output.
 - TypeScript
-- Plain CSS with design tokens. No Tailwind, no CSS-in-JS, no UI libraries.
-- Sanity for blog content only, read at build time via `@sanity/client`. Post bodies use Portable Text.
+- Sanity for blog content only.
 - Netlify for hosting, and Netlify Forms for enquiries. Submissions are emailed; there is no database.
-- The site ships zero client-side JavaScript. Keep it that way unless there's a real reason not to.
 
 ## Commands
 
@@ -53,19 +52,27 @@ Studio (`cd studio` first):
 ## Conventions
 
 ### Styling
-- Design tokens live in `:root` in `app/src/styles/global.css`, which is imported once in `Layout.astro`. Never declare `:root` anywhere else.
-- Always use tokens (`var(--...)`) for colour, spacing, type and radius. Never hard-code values. If a token is missing, add it to `global.css` and mention it.
-- Component-specific styles go in that component's scoped `<style>` block.
+- `DESIGN.md` (repo root) is the source of truth for the visual design. Don't introduce colours, fonts or sizes it doesn't define; propose an addition instead.
+- Global CSS lives in `app/src/styles/`. `global.css` is only the entry point (imported once in `Layout.astro`); it declares the cascade layers and imports, in order:
+  - `tokens.css`: all design tokens. The only `:root` in the project; never declare `:root` anywhere else.
+  - `fonts.css`: `@font-face` declarations.
+  - `base.css`: reset, element defaults (headings, links, focus), `.visually-hidden`.
+  - `components.css`: shared classes (`.container`, `.section`, `.btn-*`, `.card`, `.band`, `.page-hero`, `.cta-band`, `.eyebrow`, `.lede`, `.badge`, `.prose`).
+  - `motion.css`: `.reveal`, `.enter`, view transitions, reduced motion.
+- Layer order is `tokens, reset, base, components, motion, utilities`. A component's scoped `<style>` is unlayered, so it always beats the global layers without specificity tricks.
+- Always use tokens (`var(--...)`) for colour, spacing, type and radius. Never hard-code values. If a token is missing, add it to `tokens.css` and mention it.
+- Font sizes come only from the six-step scale: `--text-h1`, `--text-h2`, `--text-h3`, `--text-body`, `--text-small`, `--text-label`. Weights only 400/500/600. Sentence case, no `text-transform: uppercase`.
+- Component-specific styles go in that component's scoped `<style>` block. If two pages need the same styles, move them to `components.css`.
 - Mobile first, relative units, and no horizontal scrolling at any width.
-- Some one-off sizes are still literals (e.g. `0.65rem`, `1.05rem`) because snapping them to the scale would change the design. Tokenise them only as a deliberate design decision, not incidentally.
-- Never use `var(--coral)` for text. It is a mid-tone and fails WCAG AA as small
-  text on cream or white, and cream text fails on top of it. Text uses
-  `--coral-text`; buttons use `--coral-btn` with cream text. `--coral` is for
-  large decorative areas only.
+- Contrast rules (WCAG AA):
+  - The palette is coral (`--color-brand`), its blush tint (`--color-accent`) and espresso (`--color-primary` / `--color-text`). There is no green or terracotta.
+  - Coral is a fill only. As text, or as a thin line that carries meaning, it is 2.3:1 on the background.
+  - A `.band` is coral, or blush with `.band-soft`. Text inside is always `--color-text`; muted text fails on both. Use the normal `.btn-primary` / `.btn-secondary` inside bands.
+  - `--color-border` (1.3:1) is for dividers only. Form inputs use `--color-text-muted` for their border so they stay findable.
 - Don't dim text with `opacity` on a coloured band — it silently drops contrast
   below AA. Use an explicit colour and set hierarchy with size and weight.
-- Fonts are self-hosted variable woff2 in `app/public/fonts/`, declared in
-  `global.css` and preloaded in `Layout.astro`. No third-party font request.
+- Fonts are self-hosted variable woff2 in `app/public/fonts/` (Fraunces for headings, DM Sans for everything else), declared in
+  `fonts.css` and preloaded in `Layout.astro`. No third-party font request.
 
 ### Motion
 - All animation is CSS, zero JS. `.reveal` uses `animation-timeline: view()` for
@@ -76,7 +83,7 @@ Studio (`cd studio` first):
   `opacity: 1`. Visibility must never depend on an animation having run.
 - Hover effects go inside `@media (hover: hover)`, or they stick after a tap on
   touch devices.
-- Page transitions come from the CSS `@view-transition` rule in `global.css`,
+- Page transitions come from the CSS `@view-transition` rule in `motion.css`,
   not Astro's `<ClientRouter />` — that one ships a JS router.
 
 ### Components
@@ -120,45 +127,11 @@ Studio (`cd studio` first):
 - Any Sanity token must NOT use the `PUBLIC_` prefix and must never reach client-side code.
 - Never commit `.env`. Update `.env.example` whenever you add a variable.
 
-## Gotchas
-
-- Tailwind v4 was tried and removed after a Vite error (`No Astro CSS at index 0`). Do not reintroduce it.
-- The site is static, so new Sanity posts only appear after a rebuild. A Sanity webhook should trigger a Netlify build hook.
-- `app/netlify.toml` has an `ignore` rule that skips builds when nothing in `app/` changed. It checks `INCOMING_HOOK_TITLE` first, because webhook builds have no new commit and would otherwise always be cancelled — silently breaking publishing. Don't simplify that condition away.
-- `netlify.toml` lives in `app/`, so Netlify only reads it when the site's base directory is set to `app`.
-- Studio and the website deploy separately. Schema changes need a Studio redeploy, not just a site deploy.
-- Astro ignores `src/pages` files whose names start with `_`, so a scratch page named `_foo.astro` will never build.
-
 ## How to work with me
 
-- I'm learning agentic coding. When you introduce an unfamiliar concept or tool, explain it briefly. I want to understand why, not just what.
 - For any change touching more than two files, propose a short plan first and wait for my go-ahead.
 - Ask before adding any dependency. Say why it's needed and what the native alternative would be.
 - Keep changes small and focused. Don't refactor or reformat code unrelated to the task.
-- After making changes, run `npm run build` and `npx astro check`, and fix any errors before saying you're done.
+- After making changes, inform me to run `npm run build` and `npx astro check`, and fix any errors before saying you're done.
 - Don't commit or push unless I ask.
 - If something in this file looks wrong or out of date, tell me rather than silently working around it.
-
-## Current status
-
-Keep this section short and update it as work lands.
-
-- Done: all pages built and restyled in the current design (Fraunces/Inter,
-  cream canvas with coral accent bands, card hovers, CSS scroll reveals, CSS
-  view transitions); design tokens in `global.css`; homepage sections extracted
-  to `src/components/`; Sanity wired into `posts.ts` with a hand-rolled Portable
-  Text renderer; single no-JS enquiry form; `/privacy` and `/terms` created.
-- Verified: zero client JS, no horizontal scroll down to 320px, WCAG AA contrast
-  on every page, reveals resolve under reduced motion, `npx astro check` clean.
-- Blocked on Laura: the `[CONFIRM: …]` placeholders in `privacy.astro` and
-  `terms.astro`, and the `[University name]` / `[Professional body]` placeholders
-  in `about.astro`. Also the real photo for `about.astro` (placeholder box) and
-  the two `href="#"` social links in `Layout.astro`.
-- Next: set `PUBLIC_SANITY_PROJECT_ID` and `PUBLIC_SANITY_DATASET` in Netlify;
-  wire the Sanity webhook to a Netlify build hook; test the form on a deploy
-  preview.
-- Out of date in this file: the Tailwind gotcha below says Tailwind was removed,
-  but `tailwindcss` and `@tailwindcss/vite` are still installed and still wired
-  into `astro.config.mjs`. Nothing in `src/` uses them. `react`, `react-dom`,
-  `react-is`, `styled-components` and `sanity` are also still in the website's
-  dependencies. None of this was touched by the redesign.

@@ -3,9 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout title="Enquiry Sent | Laura Reynolds Nutrition">
-  <section class="success">
+  <section class="success section">
     <div class="container container-narrow">
-      <div class="card enter">
+      <div class="success-card card enter">
         <div class="tick" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12" />
@@ -18,7 +18,7 @@ import Layout from '../../layouts/Layout.astro';
         </p>
         <div class="actions">
           <a href="/" class="btn btn-primary">Back to home</a>
-          <a href="/blog" class="btn btn-quiet">Read the blog</a>
+          <a href="/blog" class="btn btn-secondary">Read the blog</a>
         </div>
       </div>
     </div>
@@ -26,19 +26,12 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <style>
-  .success {
-    padding-block: var(--section-y);
-  }
-
-  .card {
+  .success-card {
     text-align: center;
-    background-color: var(--surface);
-    border: 1px solid var(--brown-08);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-md);
-    padding: clamp(2rem, 6vw, 3.5rem) clamp(1.5rem, 5vw, 3rem);
+    padding: clamp(var(--space-xl), 6vw, var(--space-2xl)) clamp(var(--space-lg), 5vw, var(--space-2xl));
   }
 
+  /* The success colour on the blush accent is 3.8:1 — enough for an icon (3:1). */
   .tick {
     display: grid;
     place-items: center;
@@ -46,8 +39,8 @@ import Layout from '../../layouts/Layout.astro';
     height: 64px;
     margin: 0 auto var(--space-lg);
     border-radius: 50%;
-    background-color: var(--blush-soft);
-    color: var(--coral-600);
+    background-color: var(--color-accent);
+    color: var(--color-success);
   }
 
   .tick svg {
@@ -71,14 +64,10 @@ import Layout from '../../layouts/Layout.astro';
   }
 
   h1 {
-    color: var(--brown);
-    font-size: var(--text-h3);
     margin-bottom: var(--space-md);
   }
 
   p {
-    color: var(--text-muted);
-    line-height: 1.7;
     margin: 0 auto var(--space-xl);
     max-width: 44ch;
   }
@@ -88,17 +77,5 @@ import Layout from '../../layouts/Layout.astro';
     flex-wrap: wrap;
     gap: var(--space-sm);
     justify-content: center;
-  }
-
-  .btn-quiet {
-    background-color: var(--blush-tint);
-    color: var(--brown);
-  }
-
-  @media (hover: hover) {
-    .btn-quiet:hover {
-      background-color: var(--blush-soft);
-      transform: translateY(-2px);
-    }
   }
 </style>

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import HowItWorks from '../components/HowItWorks.astro';
+import ServicesTeaser from '../components/ServicesTeaser.astro';
 import BlogTeaser from '../components/BlogTeaser.astro';
 import { getLatestPosts } from '../data/posts';
 
@@ -14,44 +15,19 @@ const latestPosts = await getLatestPosts(3);
 >
   <Hero />
   <HowItWorks />
+  <ServicesTeaser />
   <BlogTeaser posts={latestPosts} />
 
-  <section class="cta-band">
+  <!-- <section class="band band-soft cta-band">
     <div class="container container-narrow reveal">
       <h2>Ready when you are</h2>
       <p>
         No pressure and no commitment — just a conversation about what you're
         looking for.
       </p>
-      <a href="/enquire" class="btn btn-light">
-        Get Started <span class="arrow" aria-hidden="true">&rarr;</span>
+      <a href="/enquire" class="btn btn-primary">
+        Get started <span class="arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
-  </section>
+  </section> -->
 </Layout>
-
-<style>
-  .cta-band {
-    background: var(--gradient-warm);
-    padding-block: var(--section-y);
-    text-align: center;
-  }
-
-  .cta-band h2 {
-    font-size: var(--text-h2);
-    color: var(--cream);
-    margin-bottom: var(--space-sm);
-  }
-
-  .cta-band p {
-    color: var(--cream);
-    font-size: 1.05rem;
-    max-width: 42ch;
-    margin: 0 auto var(--space-xl);
-  }
-
-  .cta-band :global(.btn:focus-visible) {
-    outline-color: var(--cream);
-    outline-offset: 3px;
-  }
-</style>

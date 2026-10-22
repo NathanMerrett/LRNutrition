@@ -1,155 +1,71 @@
 ---
-// The homepage hero: the one full-bleed coral band on the site.
+// The homepage hero: a full-bleed coral band, with the pitch on the left and
+// a photo of Laura on the right. On a phone they stack, text first, so the
+// headline and buttons are what shows above the fold.
 ---
 
-<section class="hero">
-  <!-- Decorative blurred colour blobs. aria-hidden and pointer-events: none —
-       they are texture, not content. -->
-  <div class="hero-blobs" aria-hidden="true">
-    <span class="blob blob-a"></span>
-    <span class="blob blob-b"></span>
-  </div>
+<section class="hero band">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow enter" style="--i: 0">Registered Associate Nutritionist</p>
+      <h1 class="enter" style="--i: 1">No nonsense nutrition coaching</h1>
+      <p class="hero-lede enter" style="--i: 2">
+        Helping you improve your energy, quality of life and long-term health with
+        tailored coaching, meal plans and practical, achievable goals.
+      </p>
+      <div class="hero-actions enter" style="--i: 3">
+        <a href="/enquire" class="btn btn-primary">
+          Get started <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/about" class="btn btn-secondary">Meet Laura</a>
+      </div>
+    </div>
 
-  <div class="hero-content container container-narrow">
-    <p class="eyebrow enter" style="--i: 0">Registered nutritionist</p>
-    <h1 class="enter" style="--i: 1">No nonsense nutrition coaching.</h1>
-    <p class="hero-lede enter" style="--i: 2">
-      Practical, personalised guidance to help you build a healthier relationship
-      with food — without the fads.
-    </p>
-    <div class="hero-actions enter" style="--i: 3">
-      <a href="/enquire" class="btn btn-dark">
-        Get Started <span class="arrow" aria-hidden="true">&rarr;</span>
-      </a>
-      <a href="/about" class="btn btn-ghost">Meet Laura</a>
+    <div class="hero-media enter" style="--i: 4">
+      <!-- Placeholder until the photo is ready. Replace this div with
+           <img src="/laura.jpg" alt="Laura Reynolds" width="800" height="1000" />
+           (any portrait works; it is cropped to fit, keeping the top in view). -->
+      <div class="photo-placeholder">Photo of Laura coming soon</div>
     </div>
   </div>
-
-  <!-- Curved join into the cream section below, instead of a hard edge. -->
-  <div class="hero-curve" aria-hidden="true"></div>
 </section>
 
 <style>
   .hero {
-    position: relative;
-    isolation: isolate;
-    background: var(--gradient-warm);
-    padding-block: clamp(4rem, 12vw, 8rem) clamp(5rem, 12vw, 9rem);
-    text-align: center;
-    overflow: hidden;
+    padding-block: var(--section-y);
   }
 
-  /* ── Decorative blobs ── */
-  .hero-blobs {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+  /* One column on a phone; text and photo side by side once there is room. */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
   }
 
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
-    /* Kept low deliberately: these sit behind cream text, and a lighter blob
-       raises the local background luminance enough to drop the small text
-       under 4.5:1 against the band. */
-    opacity: 0.2;
-  }
-
-  .blob-a {
-    width: 30rem;
-    height: 30rem;
-    top: -12rem;
-    left: -10rem;
-    background-color: var(--blush);
-  }
-
-  /* Brown, not blush — it darkens the band, so it can only help contrast. */
-  .blob-b {
-    width: 26rem;
-    height: 26rem;
-    bottom: -14rem;
-    right: -8rem;
-    background-color: var(--brown);
-    opacity: 0.28;
-  }
-
-  /* A slow drift keeps the band from feeling static. Very low amplitude — it
-     should be barely perceptible, not a distraction behind the text. */
-  @media (prefers-reduced-motion: no-preference) {
-    .blob-a {
-      animation: drift 22s var(--ease-out) infinite alternate;
+  @media (min-width: 760px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     }
-
-    .blob-b {
-      animation: drift 28s var(--ease-out) infinite alternate-reverse;
-    }
-  }
-
-  @keyframes drift {
-    from {
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-    to {
-      transform: translate3d(2.5rem, 1.5rem, 0) scale(1.12);
-    }
-  }
-
-  /* ── Content ── */
-  .hero-content {
-    position: relative;
-  }
-
-  .eyebrow {
-    color: var(--cream);
   }
 
   .hero h1 {
-    font-size: var(--text-hero);
-    line-height: 1.02;
-    letter-spacing: -0.035em;
-    color: var(--cream);
     margin-bottom: var(--space-lg);
   }
 
   .hero-lede {
-    font-size: clamp(1.05rem, 2.2vw, 1.2rem);
-    line-height: 1.65;
-    color: var(--cream);
     max-width: 44ch;
-    margin: 0 auto var(--space-xl);
+    margin-bottom: var(--space-xl);
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
-    justify-content: center;
   }
 
-  /* Secondary action: outlined, so it reads as the quieter of the two. */
-  .btn-ghost {
-    background-color: transparent;
-    color: var(--cream);
-    box-shadow: inset 0 0 0 1.5px var(--cream-28);
-  }
-
-  @media (hover: hover) {
-    .btn-ghost:hover {
-      background-color: var(--cream-12);
-      box-shadow: inset 0 0 0 1.5px var(--cream);
-      transform: translateY(-2px);
-    }
-  }
-
-  .hero :global(.btn:focus-visible) {
-    outline-color: var(--cream);
-    outline-offset: 3px;
-  }
-
-  /* On a narrow phone, stack the buttons full width rather than cramming
-     them side by side. */
+  /* On a narrow phone the main action is full width, with the quieter one
+     stacked beneath it, rather than cramming them side by side. */
   @media (max-width: 400px) {
     .hero-actions {
       flex-direction: column;
@@ -157,14 +73,33 @@
     }
   }
 
-  /* ── Curved join ── */
-  .hero-curve {
-    position: absolute;
-    left: -5%;
-    right: -5%;
-    bottom: -3.5rem;
-    height: 7rem;
-    background-color: var(--cream);
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  /* Square on a phone so it doesn't make the band very tall; portrait once it
+     sits beside the text. The real photo should fill the same box. */
+  .hero-media img {
+    display: block;
+  }
+
+  .hero-media :is(img, .photo-placeholder) {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-2xl);
+    object-fit: cover;
+    object-position: top;
+  }
+
+  @media (min-width: 760px) {
+    .hero-media :is(img, .photo-placeholder) {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  /* Cream on the coral band, with muted text (5.6:1 on cream). */
+  .photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
   }
 </style>

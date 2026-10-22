@@ -9,18 +9,18 @@ const posts = await getPosts();
 <Layout title="Blog | Laura Reynolds Nutrition" description="Practical nutrition tips and honest advice.">
   <section class="page-hero">
     <div class="container">
-      <h1>The blog</h1>
+      <h1>The Balanced Bite Blog</h1>
       <p class="lede">
         Practical tips and honest takes on food, nutrition, and everyday eating.
       </p>
     </div>
   </section>
 
-  <section class="posts">
+  <section class="posts section">
     <div class="container">
       {
         posts.length === 0 ? (
-          <div class="empty">
+          <div class="empty card">
             <p>No posts yet — the first one is on its way.</p>
             <a href="/enquire" class="btn btn-primary">
               Get in touch <span class="arrow" aria-hidden="true">&rarr;</span>
@@ -39,10 +39,6 @@ const posts = await getPosts();
 </Layout>
 
 <style>
-  .posts {
-    padding-block: var(--section-y);
-  }
-
   .post-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -67,15 +63,9 @@ const posts = await getPosts();
     max-width: 44ch;
     margin: 0 auto;
     padding: var(--space-2xl) var(--space-lg);
-    background-color: var(--surface);
-    border: 1px solid var(--brown-08);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
   }
 
   .empty p {
-    color: var(--text-muted);
-    line-height: 1.7;
     margin-bottom: var(--space-lg);
   }
 </style>
