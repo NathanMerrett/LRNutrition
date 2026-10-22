@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 // (and ideally her insurer or professional body) before this goes live.
 // Do not publish as-is.
 
-const lastUpdated = '[CONFIRM: date these terms were reviewed]';
+const lastUpdated = '06 October 2026';
 ---
 
 <Layout
@@ -20,15 +20,14 @@ const lastUpdated = '[CONFIRM: date these terms were reviewed]';
     </div>
   </section>
 
-  <section class="prose-section">
+  <section class="section">
     <div class="container container-prose prose">
-      <p class="meta">Last updated: {lastUpdated}</p>
+      <p class="badge">Last updated: {lastUpdated}</p>
 
       <h2>About these terms</h2>
       <p>
         These terms cover your use of this website and, where relevant, nutrition
-        coaching provided by Laura Reynolds, trading as Laura Reynolds Nutrition
-        [CONFIRM: registered business name and address]. By using this site you accept
+        coaching provided by Laura Reynolds, trading as Laura Reynolds Nutrition. By using this site you accept
         them.
       </p>
 
@@ -47,8 +46,7 @@ const lastUpdated = '[CONFIRM: date these terms were reviewed]';
       <h2>Coaching services</h2>
       <p>
         Nutrition coaching is delivered on the terms agreed with you individually before
-        we start, covering [CONFIRM: what is included, session format and length, and
-        how many sessions]. Coaching is a collaborative process and depends on the
+        we start. Coaching is a collaborative process and depends on the
         information you give me. I cannot guarantee any particular outcome or result.
       </p>
       <p>
@@ -59,9 +57,7 @@ const lastUpdated = '[CONFIRM: date these terms were reviewed]';
 
       <h2>Fees, payment and cancellation</h2>
       <p>
-        Fees are as quoted to you before booking. [CONFIRM: when payment is due, accepted
-        payment methods, notice period for cancelling or rescheduling a session, and
-        whether late cancellations are charged.]
+        Fees are as quoted to you before booking.
       </p>
 
       <h2>Qualifications and regulation</h2>
@@ -75,8 +71,7 @@ const lastUpdated = '[CONFIRM: date these terms were reviewed]';
       <p>
         I take reasonable care in providing this website and my coaching services.
         Nothing in these terms limits liability for death or personal injury caused by
-        negligence, or for fraud. [CONFIRM: any further liability wording with Laura's
-        insurer — do not invent this.]
+        negligence, or for fraud.
       </p>
 
       <h2>Content on this site</h2>
@@ -94,58 +89,14 @@ const lastUpdated = '[CONFIRM: date these terms were reviewed]';
 
       <h2>Governing law</h2>
       <p>
-        These terms are governed by the law of England and Wales. [CONFIRM: correct
-        jurisdiction for Laura's location.]
+        These terms are governed by the law of England and Wales.
       </p>
 
       <h2>Getting in touch</h2>
       <p>
         Questions about these terms can go to
-        <a href="mailto:hello@lrnutrition.co.uk">hello@lrnutrition.co.uk</a>.
+        <a href="mailto:nutritionwithlr@gmail.com">nutritionwithlr@gmail.com</a>.
       </p>
     </div>
   </section>
 </Layout>
-
-<style>
-  /* ── Prose ── */
-  .prose-section {
-    padding-block: var(--section-y);
-  }
-
-  .prose h2 {
-    font-size: 1.45rem;
-    color: var(--brown);
-    margin-top: 2.75rem;
-    margin-bottom: var(--space-sm);
-  }
-
-  .prose h2:first-of-type {
-    margin-top: 0;
-  }
-
-  .prose p {
-    color: var(--text);
-    line-height: 1.8;
-    margin-bottom: var(--space-md);
-  }
-
-  .prose a {
-    color: var(--coral-text);
-    font-weight: 600;
-    text-underline-offset: 3px;
-  }
-
-  /* Draft placeholders are deliberately loud — they must not reach production
-     unnoticed. Styled by content, so they disappear once the text is filled in. */
-  .meta {
-    display: inline-block;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    background-color: var(--blush-tint);
-    border: 1px solid var(--blush);
-    border-radius: var(--radius-pill);
-    padding: 0.4rem 0.9rem;
-    margin-bottom: 2.5rem;
-  }
-</style>

@@ -1,0 +1,104 @@
+---
+// Homepage teaser for /services: every price at a glance, with the detail one
+// tap away. Reads the same data as the services page, so they always agree.
+import { services, SHOW_OFFER, formatPrice } from '../data/services';
+---
+
+<section class="services-teaser section">
+  <div class="container container-narrow">
+    <header class="section-head reveal">
+      <!-- <p class="eyebrow">Services</p> -->
+      <h2>Services</h2>
+    </header>
+
+    <div class="price-list card reveal">
+      {SHOW_OFFER && <p class="badge">Introductory offer for my first five clients</p>}
+
+      <ul>
+        {
+          services.map(({ title, price, duration }) => (
+            <li>
+              <span class="service">
+                <span class="name">{title}</span>
+                <span class="duration">{duration}</span>
+              </span>
+              <span class="price">{formatPrice(price)}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a href="/services" class="btn btn-secondary">
+        See services and prices <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-teaser {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-head {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .price-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+  }
+
+  .badge {
+    align-self: flex-start;
+  }
+
+  .price-list ul {
+    list-style: none;
+  }
+
+  .price-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    max-width: none;
+    padding-block: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .price-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .service {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .name {
+    font-weight: var(--weight-semibold);
+  }
+
+  .duration {
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    color: var(--color-text-muted);
+  }
+
+  .price {
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-h3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .price-list .btn {
+    width: 100%;
+  }
+</style>

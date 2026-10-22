@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Services from '../components/Services.astro';
+import { services, formatPrice } from '../data/services';
+
+// Built from the same data as the cards, so the search snippet can't go stale.
+const description = `Clear, upfront prices for nutrition coaching with Laura Reynolds: ${services
+  .map(({ title, price }) => `${title} (${formatPrice(price)})`)
+  .join(', ')}.`;
+---
+
+<Layout title="Services | Laura Reynolds Nutrition" description={description}>
+  <!-- <section class="page-hero">
+    <div class="container">
+      <h1>Services</h1>
+      <p class="lede">Clear prices, up front. You'll know exactly what it costs before you commit to anything.</p>
+    </div>
+  </section> -->
+
+  <Services />
+</Layout>

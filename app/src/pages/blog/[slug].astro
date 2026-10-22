@@ -59,38 +59,27 @@ const heroSrc = imageUrl(post.mainImage, { width: 1200, height: 630 });
     <div class="post-body container container-prose">
       <PortableText value={post.body} />
     </div>
-
-    <div class="post-footer container container-prose">
-      <a href="/enquire" class="cta-inline">
-        <span>
-          <strong>Want personalised advice?</strong>
-          <span class="cta-sub">Tell me what you're working on and I'll get back to you.</span>
-        </span>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-      </a>
-    </div>
   </article>
 </Layout>
 
 <style>
   /* ── Header ── */
   .post-header {
-    background: linear-gradient(180deg, var(--blush) 0%, var(--blush-soft) 100%);
-    padding-block: clamp(2rem, 6vw, 3.5rem);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-xl) var(--space-2xl);
   }
 
   .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    color: var(--brown);
+    gap: var(--space-xs);
+    min-height: var(--tap-target);
+    color: var(--color-text-muted);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: var(--space-lg);
-    /* 44px tap target */
-    padding-block: 0.6rem;
-    transition: opacity var(--dur-fast) var(--ease-out);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    margin-bottom: var(--space-md);
   }
 
   .back-link .arrow {
@@ -99,7 +88,7 @@ const heroSrc = imageUrl(post.mainImage, { width: 1200, height: 630 });
 
   @media (hover: hover) {
     .back-link:hover {
-      opacity: 1;
+      color: var(--color-text);
     }
 
     .back-link:hover .arrow {
@@ -109,41 +98,30 @@ const heroSrc = imageUrl(post.mainImage, { width: 1200, height: 630 });
 
   time {
     display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--brown);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    letter-spacing: var(--tracking-small);
+    color: var(--color-text-muted);
     margin-bottom: var(--space-sm);
-  }
-
-  h1 {
-    font-size: var(--text-h3);
-    color: var(--brown);
-    line-height: 1.1;
   }
 
   .summary {
     margin-top: var(--space-md);
-    color: var(--brown);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    max-width: 58ch;
+    color: var(--color-text-muted);
   }
 
   /* ── Hero image ──
-   * Pulled up into the blush band so it straddles the join, which reads far
+   * Pulled up into the header band so it straddles the join, which reads far
    * more designed than sitting squarely below it.
    */
   .hero-image {
-    margin-top: clamp(-3rem, -5vw, -2rem);
+    margin-top: calc(-1 * var(--space-xl));
     position: relative;
   }
 
   .hero-image img {
     display: block;
     width: 100%;
-    height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: var(--radius-xl);
@@ -152,70 +130,6 @@ const heroSrc = imageUrl(post.mainImage, { width: 1200, height: 630 });
 
   /* ── Body ── */
   .post-body {
-    padding-block: var(--space-2xl);
-    line-height: 1.8;
-    color: var(--text);
-    font-size: 1.0625rem;
-  }
-
-  /* ── Footer CTA ── */
-  .post-footer {
-    padding-bottom: var(--section-y);
-  }
-
-  .cta-inline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
-    background: linear-gradient(135deg, var(--blush-tint) 0%, var(--blush-soft) 100%);
-    border: 1px solid var(--blush);
-    border-radius: var(--radius-xl);
-    padding: var(--space-lg);
-    text-decoration: none;
-    color: var(--brown);
-    box-shadow: var(--shadow-sm);
-    transition:
-      transform var(--dur-mid) var(--ease-out),
-      box-shadow var(--dur-mid) var(--ease-out);
-  }
-
-  .cta-inline strong {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .cta-sub {
-    display: block;
-    font-size: 0.9rem;
-    opacity: 0.75;
-    line-height: 1.5;
-  }
-
-  .cta-inline .arrow {
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--coral);
-    color: var(--cream);
-    font-size: 1.1rem;
-    transition: transform var(--dur-mid) var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .cta-inline:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .cta-inline:hover .arrow {
-      transform: translateX(4px);
-    }
+    padding-block: var(--space-2xl) var(--section-y);
   }
 </style>

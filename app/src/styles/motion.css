@@ -1,0 +1,85 @@
+/*
+ * All motion is CSS, zero JS.
+ *   .reveal — scroll-driven reveal for content below the fold
+ *   .enter  — entrance for above-the-fold content, staggered with --i
+ * Under prefers-reduced-motion, both are hard-reset to visible.
+ */
+
+/* ── Cross-document view transitions ──
+ * Pure CSS: the browser cross-fades between pages on navigation. This is not
+ * Astro's <ClientRouter />, which ships a JS router — this ships nothing at
+ * all. Browsers without support simply navigate as normal.
+ */
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer motion {
+  /* `animation-timeline: view()` ties an animation's progress to the element's
+     position in the viewport, so this needs no IntersectionObserver.
+
+     The @supports guard matters: without it, browsers lacking support would
+     apply the animation's `from` state permanently and the content would sit
+     invisibly at opacity 0. Inside the guard, they just render it normally. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: rise-in linear both;
+        animation-timeline: view();
+        /* Both ends sit inside the `entry` phase on purpose. An element that is
+           already fully visible on load has, by definition, finished entering,
+           so it resolves to 100% and renders normally — which is what saves a
+           short page (or a tall viewport) from stranding content at opacity 0. */
+        animation-range: entry 0% entry 80%;
+      }
+    }
+  }
+
+  /* Entrance animation for above-the-fold content, which scroll timelines can't
+     drive (it is already in view on load). Staggered with --i. */
+  @media (prefers-reduced-motion: no-preference) {
+    .enter {
+      animation: rise-in var(--dur-slow) var(--ease-out) both;
+      animation-delay: calc(var(--i, 0) * 90ms);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Collapsing the duration above is not enough on its own: these animations
+       start from opacity 0, so anything that does not actually run to completion
+       stays invisible. Neutralise them outright — whether content is readable
+       must never depend on an animation having played. */
+    .reveal,
+    .enter {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
+  }
+}

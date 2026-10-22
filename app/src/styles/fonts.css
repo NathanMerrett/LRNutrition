@@ -1,0 +1,23 @@
+/*
+ * Self-hosted variable fonts, latin subset — one file per family covers every
+ * weight. Served from our own origin, so no third-party request (and no
+ * visitor IPs sent to Google). Both files are preloaded in Layout.astro.
+ *
+ * Only Fraunces 600 and DM Sans 400/500/600 are actually used (DESIGN.md §3.1).
+ */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces-latin-var.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/dm-sans-latin-var.woff2') format('woff2');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}

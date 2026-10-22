@@ -1,0 +1,163 @@
+---
+/*
+ * The offer box and service cards on /services. Content lives in
+ * src/data/services.ts, shared with the homepage teaser.
+ *
+ * With the offer switched off, its enquiry button moves under the cards, so
+ * the section always keeps exactly one.
+ */
+import { services, SHOW_OFFER, OFFER_TEXT, formatPrice } from '../data/services';
+---
+
+<section class="services section">
+  <div class="container">
+    {
+      SHOW_OFFER && (
+        <div class="offer reveal">
+          <div>
+            <h2>Introductory offer</h2>
+            <p>{OFFER_TEXT}</p>
+          </div>
+          <a href="/enquire" class="btn btn-primary">
+            Submit an enquiry <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      )
+    }
+
+    <ul class="service-list">
+      {
+        services.map(({ title, price, duration, desc }, i) => (
+          <li class="service card reveal" style={`--i: ${i}`}>
+            <h2>{title}</h2>
+            <p class="price">
+              <span class="visually-hidden">Price: </span>
+              <span class="amount">{formatPrice(price)}</span>
+              <span class="duration">
+                <span class="visually-hidden">Duration: </span>
+                {duration}
+              </span>
+            </p>
+            <p class="desc">{desc}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      !SHOW_OFFER && (
+        <p class="cta reveal">
+          <a href="/enquire" class="btn btn-primary">
+            Submit an enquiry <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  /* The page's <h1> is in the header band, so these are <h2>s for heading
+     order, sized as h3 because they label cards rather than sections. */
+  .offer h2,
+  .service h2 {
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+  }
+
+  /* ── Introductory offer ──
+   * Blush with espresso text (11:1). Stacked on a phone with a full-width
+   * button; text and button side by side once there is room.
+   */
+  .offer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    background-color: var(--color-accent);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-md);
+  }
+
+  .offer h2 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .offer .btn {
+    width: 100%;
+  }
+
+  @media (min-width: 720px) {
+    .offer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xl);
+    }
+
+    .offer .btn {
+      width: auto;
+      flex-shrink: 0;
+    }
+  }
+
+  /* ── Services ── One column on a phone; three side by side once they fit,
+     skipping the two-column step that would strand the third card. */
+  .service-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  @media (min-width: 900px) {
+    .service-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    max-width: none;
+    padding: var(--space-lg);
+  }
+
+  /* The figure is the point of the card, so it takes the heading face at
+     display size, like the step numbers in How it works. */
+  .price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  .amount {
+    font-family: var(--font-heading);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-h2);
+    letter-spacing: var(--tracking-h2);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-primary);
+  }
+
+  .duration {
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    color: var(--color-text-muted);
+  }
+
+  .desc {
+    color: var(--color-text-muted);
+  }
+
+  /* Only shown once the offer is switched off. */
+  .cta {
+    text-align: center;
+    margin: var(--space-xl) auto 0;
+  }
+</style>

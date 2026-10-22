@@ -2,21 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 
 const credentials = [
-  'BSc Nutrition — [University name]',
-  'Registered with [Professional body]',
-  'Member of [Association]',
+  'MSc Nutrition — London Metropolitan',
+  'AfN Registration Number - 40207',
 ];
 ---
 
-<Layout title="About | Laura Reynolds Nutrition" description="About Laura Reynolds, nutritionist.">
-  <section class="page-hero">
+<Layout title="About | Laura Reynolds Nutrition" description="About Laura Reynolds, Registered Associate Nutritionist.">
+  <!-- <section class="page-hero">
     <div class="container">
-      <h1>About Laura</h1>
-      <p class="lede">Registered nutritionist. Real food. No nonsense.</p>
+      <h1>About Me</h1>
+      <p class="lede">Registered Associate Nutritionist. Real food. No nonsense.</p>
     </div>
-  </section>
+  </section>  -->
 
-  <section class="bio">
+  <section class="bio section">
     <div class="container bio-grid">
       <div class="bio-media reveal">
         <!-- Replace with <img src="/laura.jpg" alt="Laura Reynolds" /> when ready -->
@@ -27,24 +26,19 @@ const credentials = [
         <p class="eyebrow">Hi, I'm Laura</p>
         <h2>Food advice that fits your actual life</h2>
         <p>
-          I'm a registered nutritionist with a passion for helping people build a healthier,
-          more relaxed relationship with food. I work with clients one-to-one to create
-          practical, sustainable plans that fit around real life — not some idealised version of it.
+          After a career change in 2023, I followed my love of food and health and completed a Master’s degree in Human Nutrition. I am now a Registered Associate Nutritionist with the AfN, supporting individuals to make meaningful, lasting changes to their health.
         </p>
         <p>
-          I got into nutrition because I know first-hand how confusing and overwhelming food
-          advice can be. My approach cuts through the noise: no fad diets, no unnecessary
-          restriction, just honest, evidence-based guidance tailored to you.
+          I’m also driven by my own experiences, as I was diagnosed with coeliac disease in my mid-twenties after a routine blood test. I can completely relate to feeling that total lack of energy, and the overwhelm of complete overhauls of diet and lifestyle (whether out of choice or not!).
         </p>
         <p>
-          Whether you're looking to improve your energy, manage your weight, or simply feel
-          better day to day — I'm here to help.
+          My approach is driven by science as a whole, not single studies or trends. I look at the full body of research and use the strongest types of evidence available to guide my recommendations. Whether your goal is improving energy levels, enhancing sports performance, or managing weight in a sustainable way, my approach will always be evidence based. It will be practical, supportive, and tailored to you, focusing on simple steps that fit into your everyday life.
         </p>
       </div>
     </div>
   </section>
 
-  <section class="credentials">
+  <section class="credentials section">
     <div class="container">
       <header class="section-head reveal">
         <p class="eyebrow">Credentials</p>
@@ -53,7 +47,7 @@ const credentials = [
       <ul class="cred-list">
         {
           credentials.map((item, i) => (
-            <li class="reveal" style={`--i: ${i}`}>
+            <li class="card reveal" style={`--i: ${i}`}>
               <span class="tick" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12" />
@@ -67,11 +61,11 @@ const credentials = [
     </div>
   </section>
 
-  <section class="cta-band">
+  <section class="band band-soft cta-band">
     <div class="container container-narrow reveal">
       <h2>Ready to get started?</h2>
       <p>Get in touch and we can talk about what you're looking for.</p>
-      <a href="/enquire" class="btn btn-light">
+      <a href="/enquire" class="btn btn-primary">
         Enquire now <span class="arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
@@ -80,14 +74,10 @@ const credentials = [
 
 <style>
   /* ── Bio ── */
-  .bio {
-    padding-block: var(--section-y);
-  }
-
   .bio-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(2rem, 5vw, 3.5rem);
+    gap: var(--space-2xl);
     align-items: center;
   }
 
@@ -100,36 +90,22 @@ const credentials = [
   .image-box {
     width: 100%;
     aspect-ratio: 3 / 4;
-    background:
-      radial-gradient(circle at 30% 25%, var(--blush) 0%, transparent 60%),
-      linear-gradient(140deg, var(--blush-soft) 0%, var(--blush-tint) 100%);
-    border: 1px solid var(--brown-08);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--brown);
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
-
-  .eyebrow {
-    color: var(--coral-text);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
   }
 
   .bio-text h2 {
-    font-size: var(--text-h2);
-    color: var(--brown);
     margin-bottom: var(--space-md);
   }
 
   .bio-text p:not(.eyebrow) {
-    color: var(--text-muted);
-    line-height: 1.75;
     margin-bottom: var(--space-md);
-    font-size: 1rem;
-    max-width: 62ch;
   }
 
   .bio-text p:last-child {
@@ -138,17 +114,11 @@ const credentials = [
 
   /* ── Credentials ── */
   .credentials {
-    background: linear-gradient(180deg, var(--blush-tint) 0%, var(--cream) 100%);
-    padding-block: var(--section-y);
+    border-top: 1px solid var(--color-border);
   }
 
   .section-head {
     margin-bottom: var(--space-xl);
-  }
-
-  .section-head h2 {
-    font-size: var(--text-h2);
-    color: var(--brown);
   }
 
   .cred-list {
@@ -162,13 +132,9 @@ const credentials = [
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    background-color: var(--surface);
-    border: 1px solid var(--brown-08);
+    max-width: none;
     border-radius: var(--radius-lg);
     padding: var(--space-md) var(--space-lg);
-    color: var(--text);
-    font-size: 0.975rem;
-    box-shadow: var(--shadow-sm);
     transition:
       transform var(--dur-mid) var(--ease-out),
       box-shadow var(--dur-mid) var(--ease-out);
@@ -181,6 +147,7 @@ const credentials = [
     }
   }
 
+  /* Espresso on the blush accent is 11:1. */
   .tick {
     flex-shrink: 0;
     display: grid;
@@ -188,36 +155,12 @@ const credentials = [
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background-color: var(--blush-soft);
-    color: var(--coral-600);
+    background-color: var(--color-accent);
+    color: var(--color-primary);
   }
 
   .tick svg {
     width: 14px;
     height: 14px;
-  }
-
-  /* ── CTA band ── */
-  .cta-band {
-    background: var(--gradient-warm);
-    padding-block: var(--section-y);
-    text-align: center;
-  }
-
-  .cta-band h2 {
-    font-size: var(--text-h2);
-    color: var(--cream);
-    margin-bottom: var(--space-sm);
-  }
-
-  .cta-band p {
-    color: var(--cream);
-    font-size: 1.05rem;
-    margin-bottom: var(--space-xl);
-  }
-
-  .cta-band :global(.btn:focus-visible) {
-    outline-color: var(--cream);
-    outline-offset: 3px;
   }
 </style>
